@@ -1,0 +1,8 @@
+.. _publications:
+
+Relevant Publications
+=====================
+
+.. raw:: html
+
+    <script src="https://bibbase.org/show?bib=https%3A%2F%2Fapi.zotero.org%2Fgroups%2F2875157%2Fitems%3Fkey%3DcphI3T6CrlDY1YrGsX1VhcQT%26format%3Dbibtex%26limit%3D100&jsonp=1"></script>
