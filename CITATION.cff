@@ -1,15 +1,21 @@
-cff-version: 0.1
+cff-version: 0.0.2
 message: "If you use this software, please cite it as below."
 authors:
   - family-names: "Khider"
     given-names: "Deborah"
     orcid: "https://orcid.org/0000-0001-7501-8430"
+  - family-names: "Ratnakar"
+    given-names: "Varun"
+    orcid: "https://orcid.org/0000-0001-9381-705X"
   - family-names: "Zhu"
     given-names: "Feng"
     orcid: "https://orcid.org/0000-0002-9969-2953"
   - family-names: "Emile-Geay"
     given-names: "Julien"
     orcid: "https://orcid.org/0000-0001-5920-4751"
+  - family-names: "Gil"
+    given-names: "Yolanda"
+    orcid: "https://orcid.org/0000-0001-8465-8341"
 title: "paleoTS: Automated analysis of paleoclimate data"
 version: v0.0.1
 doi: TBD
