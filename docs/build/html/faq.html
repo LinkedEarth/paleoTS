@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Creating an account &mdash; paleoTS 0.1.0 documentation</title>
+  <title>Frequently asked questions &mdash; paleoTS 0.1.0 documentation</title>
   
 
   
@@ -38,8 +38,8 @@
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Installing paleoTS" href="installing.html" />
-    <link rel="prev" title="Frequently asked questions" href="faq.html" /> 
+    <link rel="next" title="Creating an account" href="account.html" />
+    <link rel="prev" title="The philosophy behind PaleoTS" href="philosophy.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -84,13 +84,13 @@
             
             
               <p class="caption" role="heading"><span class="caption-text">What is PaleoTS?</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="philosophy.html">The philosophy behind PaleoTS</a></li>
-<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently asked questions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Frequently asked questions</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Creating an account</a></li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="account.html">Creating an account</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installing.html">Installing paleoTS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="working.html">Working with PaleoTS</a></li>
 </ul>
@@ -144,13 +144,13 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Creating an account</li>
+      <li>Frequently asked questions</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/account.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/faq.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -163,9 +163,16 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="creating-an-account">
-<span id="create-account"></span><h1>Creating an account<a class="headerlink" href="#creating-an-account" title="Permalink to this heading">¶</a></h1>
-<p>You can try PaleoTS through the <a class="reference external" href="https://datascience4all.org/wings-portal-new/">WINGS Portal</a>. To create an account, please <a class="reference external" href="mailto:varunr&#37;&#52;&#48;isi&#46;edu">contact us</a>.</p>
+  <div class="section" id="frequently-asked-questions">
+<span id="faq"></span><h1>Frequently asked questions<a class="headerlink" href="#frequently-asked-questions" title="Permalink to this heading">¶</a></h1>
+<ol class="arabic simple">
+<li><p>Do I need to use Pyleoclim with PaleoTS? Can I use other toolboxes?</p></li>
+</ol>
+<p>The short answer to this is yes. You can use any toolboxes and in any languages that your heart desire and write the component code. However, there are two caveats to take into consideration:</p>
+<ul class="simple">
+<li><p>You may need to create and store a Docker container for that specific library if you are planning to use our servers. Otherwise you just need to ensure that the library is available on your server along WINGS.</p></li>
+<li><p>The data output need to be of similar type as what is needed by the abstract workflow (in most cases a JSON file). If you are planning to replace only certain components in workflow, make sure that the properties in the JSON file are filled out appropriately.</p></li>
+</ul>
 </div>
 
 
@@ -176,10 +183,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="installing.html" class="btn btn-neutral float-right" title="Installing paleoTS" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="account.html" class="btn btn-neutral float-right" title="Creating an account" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="faq.html" class="btn btn-neutral float-left" title="Frequently asked questions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="philosophy.html" class="btn btn-neutral float-left" title="The philosophy behind PaleoTS" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

@@ -1,49 +1,45 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
-  <meta charset="utf-8" />
-  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8">
   
-  <title>Working with paleoTS &mdash; paleoTS 0.1.0 documentation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-
-  
+  <title>Working with PaleoTS &mdash; paleoTS 0.1.0 documentation</title>
   
 
   
   
-
+  
   
 
   
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
     
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Reproducing a scientific workflow with paleoTS" href="workflow.html" />
-    <link rel="prev" title="Creating an account" href="account.html" /> 
+    <link rel="prev" title="Installing paleoTS" href="installing.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -80,7 +76,6 @@
           
         </div>
 
-        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -90,12 +85,18 @@
             
               <p class="caption" role="heading"><span class="caption-text">What is PaleoTS?</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="philosophy.html">The philosophy behind paleoTS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="philosophy.html">The philosophy behind PaleoTS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently asked questions</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="account.html">Creating an account</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Working with paleoTS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing.html">Installing paleoTS</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Working with PaleoTS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#wings-login">WINGS login</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#terminology">Terminology</a></li>
+</ul>
+</li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Learn More</span></p>
 <ul>
@@ -107,7 +108,6 @@
             
           
         </div>
-        
       </div>
     </nav>
 
@@ -142,20 +142,18 @@
 
 
 
-
-
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Working with paleoTS</li>
+      <li>Working with PaleoTS</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="_sources/working.rst.txt" rel="nofollow"> View page source</a>
           
         
@@ -169,38 +167,51 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <section id="working-with-paleots">
-<span id="working"></span><h1>Working with paleoTS<a class="headerlink" href="#working-with-paleots" title="Permalink to this headline">¶</a></h1>
-</section>
+  <div class="section" id="working-with-paleots">
+<span id="working"></span><h1>Working with PaleoTS<a class="headerlink" href="#working-with-paleots" title="Permalink to this heading">¶</a></h1>
+<p>If you haven’t done so already, we recommend you read the <a class="reference internal" href="philosophy.html#philosophy"><span class="std std-ref">The philosophy behind PaleoTS</span></a> first.</p>
+<div class="section" id="wings-login">
+<h2>WINGS login<a class="headerlink" href="#wings-login" title="Permalink to this heading">¶</a></h2>
+<p>PaleoTS is a specific domain of the autoTS/WINGS ecosystem. You can either <a class="reference internal" href="account.html#create-account"><span class="std std-ref">Creating an account</span></a> on our server or <a class="reference internal" href="installing.html#installing"><span class="std std-ref">Installing paleoTS</span></a> on your own system. If using our server, go to <a class="reference external" href="https://datascience4all.org/wings-portal-new/">the WINGS portal</a>. You will be presented with this login screen:</p>
+<img alt="_images/WINGSPage.png" src="_images/WINGSPage.png" />
+<p>Click on login and enter you credentials on the next page. Once you are logged in, you should see the following:</p>
+<img alt="_images/WINGSDomain.png" src="_images/WINGSDomain.png" />
+<p>Make sure that the PaleoTS domain is selected (green square around AutoTSv2 on the image above). If not, click on the name of the domain at the top (green circle) and select PaleoTS. You can make PaleoTS the default domain by selecting it in the menu (red circle on the figure above) and click on <em>Set Default</em>.</p>
+<p>The rest of this tutorial will show you how to use PaleoTS. We advise completing this tutorial in order once as each step builds on understanding from the previous tutorial step. Please refer to the <a class="reference internal" href="#terminology"><span class="std std-ref">Terminology</span></a> section as needed (the relevant terms will be linked in the text for ease of navigation).</p>
+</div>
+<div class="section" id="terminology">
+<h2>Terminology<a class="headerlink" href="#terminology" title="Permalink to this heading">¶</a></h2>
+</div>
+</div>
 
 
            </div>
            
           </div>
           <footer>
+  
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="workflow.html" class="btn btn-neutral float-right" title="Reproducing a scientific workflow with paleoTS" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="account.html" class="btn btn-neutral float-left" title="Creating an account" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+      
+        <a href="workflow.html" class="btn btn-neutral float-right" title="Reproducing a scientific workflow with paleoTS" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="installing.html" class="btn btn-neutral float-left" title="Installing paleoTS" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
     </div>
+  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2022, Deborah Khider, Varun Ratnakar, Feng Zhu, Julien Emile-Geay, Yolanda Gil.
+        &copy; Copyright 2022, Deborah Khider, Varun Ratnakar, Feng Zhu, Julien Emile-Geay, Yolanda Gil
 
     </p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
+
         </div>
       </div>
 
@@ -208,6 +219,7 @@
 
   </div>
   
+
 
   <script type="text/javascript">
       jQuery(function () {
