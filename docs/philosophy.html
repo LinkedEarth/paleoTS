@@ -5,7 +5,8 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  
+  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>The philosophy behind PaleoTS &mdash; paleoTS 0.1.0 documentation</title>
@@ -169,9 +170,9 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="the-philosophy-behind-paleots">
+  <section id="the-philosophy-behind-paleots">
 <span id="philosophy"></span><h1>The philosophy behind PaleoTS<a class="headerlink" href="#the-philosophy-behind-paleots" title="Permalink to this heading">¶</a></h1>
-<div class="section" id="what-is-paleots">
+<section id="what-is-paleots">
 <h2>What is PaleoTS?<a class="headerlink" href="#what-is-paleots" title="Permalink to this heading">¶</a></h2>
 <p>PaleoTS represents a specific paleoclimate application of the <a class="reference external" href="https://knowledgecaptureanddiscovery.github.io/autoTS/">autoTS</a>, an automated system for time series analysis. autoTS is conceived around three ideas:</p>
 <ul class="simple">
@@ -179,8 +180,8 @@
 <li><p>To automatically characterize datasets to extract properties that will affect the choice of analytic methods (e.g., the data has missing values) to instantiate those workflow templates.</p></li>
 <li><p>To curate a catalog of primitive pre-processing and analysis functions for timeseries data that map to workflow steps and are annotated with preconditions (e.g., evenly-spaced time series is requires), performance (e.g., bias in the low-frequency domain), and other constraints that will be used to generate solutions.</p></li>
 </ul>
-</div>
-<div class="section" id="why-paleots">
+</section>
+<section id="why-paleots">
 <h2>Why PaleoTS?<a class="headerlink" href="#why-paleots" title="Permalink to this heading">¶</a></h2>
 <p>Time series analysis can be useful to (1) identify periodicities, which may be associated with known phenomena; (2) investigate the temporal continuum to understand how energy within the Earth system is redistributes across various timescales;(3) assign time to the long geologic record of past climate varaibility; (4) filter to highlight specific features in climate datasets; (5) detect regime shift; (6) identify coherent spatiotemporal variability betweenn multiple independent series; (6) identify correlation between climate variables.</p>
 <p>Although many signal processing methodologies relevant to time series analysis are widely available in popular packages and libraries in Matlab, R, and Python, there are important aspects that should be taken into consideration as are often unique to the dataset(s) of interest:</p>
@@ -191,8 +192,8 @@
 </ul>
 <p>Consequently, time series analysis is often considered more of an art than a science, and a researcher may want to generate all possible solutions for their dataset to evaluate the robustness of their conclusions. This would be a duanting tasks if performed manually.</p>
 <p>PaleoTS aims to help with this process by generating strategies for analysis and executing all possible solutions based on this strategy.</p>
-</div>
-<div class="section" id="how-does-it-work">
+</section>
+<section id="how-does-it-work">
 <h2>How does it work?<a class="headerlink" href="#how-does-it-work" title="Permalink to this heading">¶</a></h2>
 <p>The technical details are described in the following section but for now, think about how you would describe performing a statistical analysis at a high-level. Let’s use the example of spectral analysis. Essentially, it consists of pre-processing steps such as standardization, detrending and regridding, the analysis step (transformation from the time to the frequency domain), and assessment of significance. The strategy described here can be encasulated in an <strong>abstract template</strong> as shown in the figure below.</p>
 <img alt="_images/PaleoTSv1.png" src="_images/PaleoTSv1.png" />
@@ -203,12 +204,12 @@
 <li><p>Whether the data contains a trend using the Mann-Kendall test from <a class="reference external" href="https://pypi.org/project/pymannkendall/">this package</a>. We use the Hamed and Rao modified version of this test to address serial autocorrelation issues. If a trend is detected, a series of polynomials is then fitted to the data to determine whether the trend is linear. The determination is made by calculating the RMSE for each fit and identifiying the elbow for “best fit”. The method and its performance is described in a series of <a class="reference external" href="https://github.com/KnowledgeCaptureAndDiscovery/autoTS/tree/master/notebooks/Methods/Detrending">Jupyter Notebooks</a>.</p></li>
 </ul>
 <p>Based on the information about the method and the data, PaleoTS then chooses appropriate methods and steps for the data. For instance, if the data is evenly-spaced or the method doesn’t require evenly-spaced data (e.g., Lomb-Scargle), then PaleoTS will skip the regridding step. Similarly, if the profiler detects a nonlinear trend, the linear detrending method will not be applied.</p>
-</div>
-<div class="section" id="technical-details">
+</section>
+<section id="technical-details">
 <h2>Technical details<a class="headerlink" href="#technical-details" title="Permalink to this heading">¶</a></h2>
 <p>PaleoTS is built on the WINGS workflow system, which has been extended to include data profiler. WINGS is a semantic workflow system that assists scientists with the design of computational experiments. A unique feature of WINGS is that its workflow representations incorporate semantic constraints about datasets and workflow components, and are used to create and validate workflows and to generate metadata for new data products. Information about WINGS can be found <a class="reference external" href="https://www.wings-workflows.org">here</a>.</p>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>

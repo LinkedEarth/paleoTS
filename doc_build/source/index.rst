@@ -6,9 +6,6 @@
 PaleoTS: automated time series analysis for the paleogeosciences
 ================================================================
 
-Introduction
-^^^^^^^^^^^^
-
 PaleoTS is a framework for the analysis of paleoclimate data. paleoTS leverages an artificial intelligence system for time series analysis (`autoTS <https://knowledgecaptureanddiscovery.github.io/autoTS/>`_) and the `Pyleoclim <https://pyleoclim-util.readthedocs.io/en/master/>`_ Python package dedicated to the analysis of climate data.
 
 .. toctree::
@@ -17,9 +14,6 @@ PaleoTS is a framework for the analysis of paleoclimate data. paleoTS leverages 
 
    philosophy.rst
    faq.rst
-
-Getting Started
-^^^^^^^^^^^^^^^
 
 PaleoTS was developed to allow scientists to analyze paleoclimate datasets using expert-designed workflows. PaleoTS enables researchers to explore all possible choices of statistical methods appropriate for the data and, therefore, quantify the robustness of their conclusions to choices made in data pre-processing and analysis.
 
@@ -31,10 +25,6 @@ PaleoTS was developed to allow scientists to analyze paleoclimate datasets using
    installing.rst
    working.rst
 
-Learn More
-^^^^^^^^^^
-
-PaleoTS is freely available under the terms of the `Apache license <https://github.com/LinkedEarth/paleoTS/blob/main/LICENSE>`_.
 
 .. toctree::
    :caption: Learn More
@@ -44,9 +34,5 @@ PaleoTS is freely available under the terms of the `Apache license <https://gith
    publications.rst
    citing.rst
 
-Indices and tables
-^^^^^^^^^^^^^^^^^^
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+PaleoTS is freely available under the terms of the `Apache license <https://github.com/LinkedEarth/paleoTS/blob/main/LICENSE>`_.
