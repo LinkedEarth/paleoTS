@@ -119,7 +119,7 @@ The bottom panel contains four tabs:
 
 The :ref:`executable workflow <Executable Workflow>` contains all the information about the method applied, the parameter values and the name of the output file for reproducibility. Notice that *DetrendSG* and *gkernel* are greyed out. This is because the data has no trend and was evenly-spaced so they were skipped at execution time. Notice that the file name for *OutputTS8* and *OutputTS9* are the same, confirming the skip. All names are unique for a given combination of input data, parameters, and programs (including versions of the programs).
 
-Congratulations! You have run your first analysis with PaleoTS. Feel free to go back and select another of the possible executable workflows. If you wish to use different values for the parameters, use comma-separated values in the appropriate fields.
+Congratulations! You have run your first analysis with PaleoTS. Feel free to go back and select another of the possible executable workflows.
 
 Running a workflow with multiple datasets
 -----------------------------------------
@@ -276,15 +276,102 @@ Click on *loadTS* and drag it into the workspace to the right:
 
 .. image:: /images/NewWorkflow_DropFirstComponent.png
 
-Notice the two circles at the top of the components and the bottom. They indicate that the components take two inputs (data and/or parameters) and two outputs. Click on each circle and drag and drop the corresponding box in the workspace to reveal the names of the input/outputs:
+Notice the two circles at the top of the components and the bottom. They indicate that the components take two inputs (data and/or parameters) and two outputs. If you place your cursor on each circle, PaleoTS will tell you which input/output port they correspond to. Click on each circle and drag and drop the corresponding box in the workspace:
 
 .. image:: /images/NewWorkflow_inputoutput.png
+
+The next step is *HyposthesizeOverMissingValues*. Drag the :ref:`abstract component <Abstract workflow>` into the workspace and expand the outputs. The :ref:`component <Workflow Component>` takes three inputs: a timeseries (in this case the output from *loadTS* called *OututTS* and two parameters, *start* and *stop*). Drag the parameters to an empty space. Click on the InputTs port and start dragging it. You should notice that the ports compatible with the :ref:`data type <Data Type>` shows up in red. Go ahead and drop your input port on the circle below *OutputTS*. Your workflow should now look like:
+
+.. image:: /images/NewWorkflow_SecondComponent.png
+
+Almost halfway there! Things are getting a little bit crowded. Look at the tools in the right corner of the canvas (red circle in the figure above):
+
+* Layout: Allows you to align the nodes/straighten the links of the workflow graph, giving it a more tidy appearance.
+
+* The magnifying glasses allow you to Zoom in/zoom out of the canvas
+
+* Grab image allows you to obtain an image-file of your workflow graph that you can share to describe your analysis.
+
+.. note::
+    These tools are also accessible from the results page to allow you to share the analysis used to obtain your data and support your conclusions.
+
+Now let's add the *Standardizations*, *Spectral*, and *SpectralSignificanceTesting* :ref:`abstract components <Abstract Workflow>` (the last two are located under the *Analysis* folder). You should obtain the following workflow (Image courtesy of the grab image functionality):
+
+
+.. image:: /images/NewWorkflow_Final.svg
+
+.. warning::
+  Don't forget to save your workflow!
+
+Go to Analysis -> Run workflow and try it out!
+
+.. note::
+  The spectral workflow included in PaleoTS already covers limited processing cases. Notice that the *Detrend* :ref:`abstract component <Abstract Workflow>` contains a NoDetrending method that can selected at planning. *RemoveOutliers* can be set to *false* (default). In this case, the program will return which outliers have been detected but keep them in the series. Finally, all spectral methods perform standardization within the *Spectral* component.
+
 
 Creating a breakpoint
 ---------------------
 
-Updating existing components
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Breakpoints are used by PaleoTS to signal when metadata should be sensed in order to plan the next execution. Acting on the metadata is set through rules on the components, which we will cover :ref:`at the end of the tutorial <Adding rules>`. However, rules are already set for the hypothesizing over missing values and spectral analysis. We just need to signal a breakpoint in our *SpectralAnalysis-MinimumPreprocessing*.
+
+Go to Analysis -> Edit Workflows and select the *SpectralAnalysis-MinimumPreprocessing* workflow. In this case, we want to sense metadata before the hypothesizing over missing value step, on the output called *OutputTS*. Click on the node:
+
+.. image:: /images/BreakPoint_Setting.png
+
+And toggle *Set Breakpoint for fetching metadata* to *true*. The node should now appear in red:
+
+.. image:: /images/BreakPoint_SetBreakpoint.svg
+
+.. warning::
+  Don't forget to save your workflow!
+
+And experiment with your new workflow in Analysis -> Run Workflow
+
+Inspecting existing components
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Notice that so far we haven't seen a line of code. This is what PaleoTS (and WINGS before it) was designed to do: compose workflows for a science application without worrying about coding. However, you may be interested in :ref:`updating the code <Updating existing components>` or even :ref:`create your own <Creating new components>`. So let's have a look at the interface in PaleoTS that allows you to enter your own code!
+
+Go to Advanced -> Manage Components:
+
+.. image:: /images/Component_getto.png
+
+You should see the following list of components:
+
+.. image:: /images/Component_list.png
+
+The folders help us organize the abstract component according to their category (e.g., analysis, pre-processing). They don't have a particular meaning beyond organization and you can choose to re-organize the components as you wish.
+
+Abstract Component
+------------------
+
+Let's have a closer look at the components in *Analysis* folder: they are organized according to abstract component step as indicated by the grey puzzle piece. Let's select the *Spectral Analysis* piece and have a closer look:
+
+.. image:: /images/Component_AbstractIO.png
+
+I/O
+***
+
+The first tab (*I/O*) described the inputs, input parameters and output of the component. Let's take a look at then one by one. The input here has the name *InputTS*. As the name (and logic) indicates, to run spectral analysis you need timeseries data. The name itself doesn't matter (I could have called the input, *timeseries* or any other names of my choosing); however, I was asked to specify a type. This is where the concept of :ref:`data types <Data Type>` is important. Here, I'm explicitly telling PaleoTS that the function only makes sense with data of the type `TimeSeries` as it wouldn't make a lot of sense to run spectral analysis on non-sequenced data.
+
+The second box concerns itself with the parameters that affect the behavior of the functions that would work across all spectral analysis methods. In our case, only the choice of frequency method is applicable across. This parameter will be the one showing up under Analyis->run/edit workflows when using :ref:`abstract components <Abstract workflow>` to create the workflow.  We will talk about setting method-specific parameter in a couple of paragraphs. Again, you can choose any names for the parameter but you need to select its type. In this case, we give it a string following the `documentation of the function in Pyleoclim <https://pyleoclim-util.readthedocs.io/en/master/core/api.html#pyleoclim.core.series.Series.spectral>`_. If you look closely at the Pyleoclim method, it accepts several arguments:
+
+* method (str), either ‘wwz’, ‘mtm’, ‘lomb_scargle’, ‘welch’, ‘periodogram’, ‘cwt’. We omit this particular parameter since we will explicitly build :ref:`executable components <Executable workflow>` that runs these methods.
+* freq_method (str), which we used as the only input parameters
+* settings (dict), which represents a dictionary of arguments for the specific method. These arguments should be passed to the :ref:`executable components <Executable workflow>` corresponding to the various methods directly.
+* freq_kwargs (str): which modifies the behavior of the *freq_method*. For PaleoTS, we made the assumption that the default behavior will be appropriate in all cases and we therefore dropped the option to modify how the frequency vector is obtained from the various methods listed in *freq_method*. If this is deemed important, then :ref:`executable components <Executable workflow>` with the various options should be created and the *freq_method* argument removed from the :ref:`abstract component <Abstract workflow>`
+
+In our case, only the `freq_method` argument is applicable across all functionalities and is therefore passed as a parameter.
+
+The output data, appropriately named *OutputPSD*, is of type *PowerSpectralDensity*. In short, we have informed PaleoTS that the result of a spectral analysis is a Power Spectral Density. If desired, a plot can be made and saved as an additional output. In this case, we refrain from doing so until the *SpectralSignificanceTesting* step.
+
+Rules
+*****
+
+The second tab corresponds to rules that we want PaleoTS to follow according to the data. The spectral component tab doesn't contain any special rules so let's head over to *Detrend* under the PreProcessing folder. 
+
+Updating the version of Pyleoclim
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Creating new components
 ^^^^^^^^^^^^^^^^^^^^^^^
@@ -295,6 +382,8 @@ Using your own packages
 Adding rules
 ------------
 
+Updating existing components
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Terminology
 ^^^^^^^^^^^

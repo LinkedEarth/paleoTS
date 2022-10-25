@@ -109,12 +109,21 @@
 <li class="toctree-l3"><a class="reference internal" href="#creating-a-breakpoint">Creating a breakpoint</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#updating-existing-components">Updating existing components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#inspecting-existing-components">Inspecting existing components</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#abstract-component">Abstract Component</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#i-o">I/O</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rules">Rules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#updating-the-version-of-pyleoclim">Updating the version of Pyleoclim</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#creating-new-components">Creating new components</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#using-your-own-packages">Using your own packages</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#adding-rules">Adding rules</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#updating-existing-components">Updating existing components</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#terminology">Terminology</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#abstract-workflow">Abstract workflow</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#executable-workflow">Executable workflow</a></li>
@@ -259,7 +268,7 @@
 <li><p><strong>Executable Workflow</strong> shows you what <a class="reference internal" href="#executable-workflow"><span class="std std-ref">workflow</span></a> has actually been run! Let’s have a look at it in more details:</p></li>
 </ul>
 <img alt="_images/Run_ExecutableWorkflow.svg" src="_images/Run_ExecutableWorkflow.svg" /><p>The <a class="reference internal" href="#executable-workflow"><span class="std std-ref">executable workflow</span></a> contains all the information about the method applied, the parameter values and the name of the output file for reproducibility. Notice that <em>DetrendSG</em> and <em>gkernel</em> are greyed out. This is because the data has no trend and was evenly-spaced so they were skipped at execution time. Notice that the file name for <em>OutputTS8</em> and <em>OutputTS9</em> are the same, confirming the skip. All names are unique for a given combination of input data, parameters, and programs (including versions of the programs).</p>
-<p>Congratulations! You have run your first analysis with PaleoTS. Feel free to go back and select another of the possible executable workflows. If you wish to use different values for the parameters, use comma-separated values in the appropriate fields.</p>
+<p>Congratulations! You have run your first analysis with PaleoTS. Feel free to go back and select another of the possible executable workflows.</p>
 <section id="running-a-workflow-with-multiple-datasets">
 <h3>Running a workflow with multiple datasets<a class="headerlink" href="#running-a-workflow-with-multiple-datasets" title="Permalink to this heading">¶</a></h3>
 <p>More often that not, we want to run the same workflow on several datasets. In PaleoTS, you can do so by setting the input (<em>InputTS</em>) as a collection. To do so, head to Analysis -&gt; Edit Workflow and select the <em>SpectralAnalysis</em> workflow. Click on <em>InputTS</em> and set “Input should be a collection” to true (red circle).</p>
@@ -362,14 +371,76 @@
 </div>
 <p>Click on <em>loadTS</em> and drag it into the workspace to the right:</p>
 <img alt="_images/NewWorkflow_DropFirstComponent.png" src="_images/NewWorkflow_DropFirstComponent.png" />
-<p>Notice the two circles at the top of the components and the bottom. They indicate that the components take two inputs (data and/or parameters) and two outputs. Click on each circle and drag and drop the corresponding box in the workspace to reveal the names of the input/outputs:</p>
+<p>Notice the two circles at the top of the components and the bottom. They indicate that the components take two inputs (data and/or parameters) and two outputs. If you place your cursor on each circle, PaleoTS will tell you which input/output port they correspond to. Click on each circle and drag and drop the corresponding box in the workspace:</p>
 <img alt="_images/NewWorkflow_inputoutput.png" src="_images/NewWorkflow_inputoutput.png" />
+<p>The next step is <em>HyposthesizeOverMissingValues</em>. Drag the <a class="reference internal" href="#abstract-workflow"><span class="std std-ref">abstract component</span></a> into the workspace and expand the outputs. The <a class="reference internal" href="#workflow-component"><span class="std std-ref">component</span></a> takes three inputs: a timeseries (in this case the output from <em>loadTS</em> called <em>OututTS</em> and two parameters, <em>start</em> and <em>stop</em>). Drag the parameters to an empty space. Click on the InputTs port and start dragging it. You should notice that the ports compatible with the <a class="reference internal" href="#data-type"><span class="std std-ref">data type</span></a> shows up in red. Go ahead and drop your input port on the circle below <em>OutputTS</em>. Your workflow should now look like:</p>
+<img alt="_images/NewWorkflow_SecondComponent.png" src="_images/NewWorkflow_SecondComponent.png" />
+<p>Almost halfway there! Things are getting a little bit crowded. Look at the tools in the right corner of the canvas (red circle in the figure above):</p>
+<ul class="simple">
+<li><p>Layout: Allows you to align the nodes/straighten the links of the workflow graph, giving it a more tidy appearance.</p></li>
+<li><p>The magnifying glasses allow you to Zoom in/zoom out of the canvas</p></li>
+<li><p>Grab image allows you to obtain an image-file of your workflow graph that you can share to describe your analysis.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>These tools are also accessible from the results page to allow you to share the analysis used to obtain your data and support your conclusions.</p>
+</div>
+<p>Now let’s add the <em>Standardizations</em>, <em>Spectral</em>, and <em>SpectralSignificanceTesting</em> <a class="reference internal" href="#abstract-workflow"><span class="std std-ref">abstract components</span></a> (the last two are located under the <em>Analysis</em> folder). You should obtain the following workflow (Image courtesy of the grab image functionality):</p>
+<img alt="_images/NewWorkflow_Final.svg" src="_images/NewWorkflow_Final.svg" /><div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Don’t forget to save your workflow!</p>
+</div>
+<p>Go to Analysis -&gt; Run workflow and try it out!</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The spectral workflow included in PaleoTS already covers limited processing cases. Notice that the <em>Detrend</em> <a class="reference internal" href="#abstract-workflow"><span class="std std-ref">abstract component</span></a> contains a NoDetrending method that can selected at planning. <em>RemoveOutliers</em> can be set to <em>false</em> (default). In this case, the program will return which outliers have been detected but keep them in the series. Finally, all spectral methods perform standardization within the <em>Spectral</em> component.</p>
+</div>
 <section id="creating-a-breakpoint">
 <h3>Creating a breakpoint<a class="headerlink" href="#creating-a-breakpoint" title="Permalink to this heading">¶</a></h3>
+<p>Breakpoints are used by PaleoTS to signal when metadata should be sensed in order to plan the next execution. Acting on the metadata is set through rules on the components, which we will cover <a class="reference internal" href="#adding-rules"><span class="std std-ref">at the end of the tutorial</span></a>. However, rules are already set for the hypothesizing over missing values and spectral analysis. We just need to signal a breakpoint in our <em>SpectralAnalysis-MinimumPreprocessing</em>.</p>
+<p>Go to Analysis -&gt; Edit Workflows and select the <em>SpectralAnalysis-MinimumPreprocessing</em> workflow. In this case, we want to sense metadata before the hypothesizing over missing value step, on the output called <em>OutputTS</em>. Click on the node:</p>
+<img alt="_images/BreakPoint_Setting.png" src="_images/BreakPoint_Setting.png" />
+<p>And toggle <em>Set Breakpoint for fetching metadata</em> to <em>true</em>. The node should now appear in red:</p>
+<img alt="_images/BreakPoint_SetBreakpoint.svg" src="_images/BreakPoint_SetBreakpoint.svg" /><div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Don’t forget to save your workflow!</p>
+</div>
+<p>And experiment with your new workflow in Analysis -&gt; Run Workflow</p>
 </section>
 </section>
-<section id="updating-existing-components">
-<h2>Updating existing components<a class="headerlink" href="#updating-existing-components" title="Permalink to this heading">¶</a></h2>
+<section id="inspecting-existing-components">
+<h2>Inspecting existing components<a class="headerlink" href="#inspecting-existing-components" title="Permalink to this heading">¶</a></h2>
+<p>Notice that so far we haven’t seen a line of code. This is what PaleoTS (and WINGS before it) was designed to do: compose workflows for a science application without worrying about coding. However, you may be interested in <a class="reference internal" href="#updating-existing-components"><span class="std std-ref">updating the code</span></a> or even <a class="reference internal" href="#creating-new-components"><span class="std std-ref">create your own</span></a>. So let’s have a look at the interface in PaleoTS that allows you to enter your own code!</p>
+<p>Go to Advanced -&gt; Manage Components:</p>
+<img alt="_images/Component_getto.png" src="_images/Component_getto.png" />
+<p>You should see the following list of components:</p>
+<img alt="_images/Component_list.png" src="_images/Component_list.png" />
+<p>The folders help us organize the abstract component according to their category (e.g., analysis, pre-processing). They don’t have a particular meaning beyond organization and you can choose to re-organize the components as you wish.</p>
+<section id="abstract-component">
+<h3>Abstract Component<a class="headerlink" href="#abstract-component" title="Permalink to this heading">¶</a></h3>
+<p>Let’s have a closer look at the components in <em>Analysis</em> folder: they are organized according to abstract component step as indicated by the grey puzzle piece. Let’s select the <em>Spectral Analysis</em> piece and have a closer look:</p>
+<img alt="_images/Component_AbstractIO.png" src="_images/Component_AbstractIO.png" />
+<section id="i-o">
+<h4>I/O<a class="headerlink" href="#i-o" title="Permalink to this heading">¶</a></h4>
+<p>The first tab (<em>I/O</em>) described the inputs, input parameters and output of the component. Let’s take a look at then one by one. The input here has the name <em>InputTS</em>. As the name (and logic) indicates, to run spectral analysis you need timeseries data. The name itself doesn’t matter (I could have called the input, <em>timeseries</em> or any other names of my choosing); however, I was asked to specify a type. This is where the concept of <a class="reference internal" href="#data-type"><span class="std std-ref">data types</span></a> is important. Here, I’m explicitly telling PaleoTS that the function only makes sense with data of the type <cite>TimeSeries</cite> as it wouldn’t make a lot of sense to run spectral analysis on non-sequenced data.</p>
+<p>The second box concerns itself with the parameters that affect the behavior of the functions that would work across all spectral analysis methods. In our case, only the choice of frequency method is applicable across. This parameter will be the one showing up under Analyis-&gt;run/edit workflows when using <a class="reference internal" href="#abstract-workflow"><span class="std std-ref">abstract components</span></a> to create the workflow.  We will talk about setting method-specific parameter in a couple of paragraphs. Again, you can choose any names for the parameter but you need to select its type. In this case, we give it a string following the <a class="reference external" href="https://pyleoclim-util.readthedocs.io/en/master/core/api.html#pyleoclim.core.series.Series.spectral">documentation of the function in Pyleoclim</a>. If you look closely at the Pyleoclim method, it accepts several arguments:</p>
+<ul class="simple">
+<li><p>method (str), either ‘wwz’, ‘mtm’, ‘lomb_scargle’, ‘welch’, ‘periodogram’, ‘cwt’. We omit this particular parameter since we will explicitly build <a class="reference internal" href="#executable-workflow"><span class="std std-ref">executable components</span></a> that runs these methods.</p></li>
+<li><p>freq_method (str), which we used as the only input parameters</p></li>
+<li><p>settings (dict), which represents a dictionary of arguments for the specific method. These arguments should be passed to the <a class="reference internal" href="#executable-workflow"><span class="std std-ref">executable components</span></a> corresponding to the various methods directly.</p></li>
+<li><p>freq_kwargs (str): which modifies the behavior of the <em>freq_method</em>. For PaleoTS, we made the assumption that the default behavior will be appropriate in all cases and we therefore dropped the option to modify how the frequency vector is obtained from the various methods listed in <em>freq_method</em>. If this is deemed important, then <a class="reference internal" href="#executable-workflow"><span class="std std-ref">executable components</span></a> with the various options should be created and the <em>freq_method</em> argument removed from the <a class="reference internal" href="#abstract-workflow"><span class="std std-ref">abstract component</span></a></p></li>
+</ul>
+<p>In our case, only the <cite>freq_method</cite> argument is applicable across all functionalities and is therefore passed as a parameter.</p>
+<p>The output data, appropriately named <em>OutputPSD</em>, is of type <em>PowerSpectralDensity</em>. In short, we have informed PaleoTS that the result of a spectral analysis is a Power Spectral Density. If desired, a plot can be made and saved as an additional output. In this case, we refrain from doing so until the <em>SpectralSignificanceTesting</em> step.</p>
+</section>
+<section id="rules">
+<h4>Rules<a class="headerlink" href="#rules" title="Permalink to this heading">¶</a></h4>
+<p>The second tab corresponds to rules that we want PaleoTS to follow according to the data. The spectral component tab doesn’t contain any special rules so let’s head over to <em>Detrend</em> under the PreProcessing folder.</p>
+</section>
+</section>
+</section>
+<section id="updating-the-version-of-pyleoclim">
+<h2>Updating the version of Pyleoclim<a class="headerlink" href="#updating-the-version-of-pyleoclim" title="Permalink to this heading">¶</a></h2>
 </section>
 <section id="creating-new-components">
 <h2>Creating new components<a class="headerlink" href="#creating-new-components" title="Permalink to this heading">¶</a></h2>
@@ -379,6 +450,9 @@
 <section id="adding-rules">
 <h3>Adding rules<a class="headerlink" href="#adding-rules" title="Permalink to this heading">¶</a></h3>
 </section>
+</section>
+<section id="updating-existing-components">
+<h2>Updating existing components<a class="headerlink" href="#updating-existing-components" title="Permalink to this heading">¶</a></h2>
 </section>
 <section id="terminology">
 <h2>Terminology<a class="headerlink" href="#terminology" title="Permalink to this heading">¶</a></h2>
