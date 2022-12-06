@@ -133,11 +133,26 @@ Once you have done so, you should notice that all the boxes are doubled. It indi
 .. warning::
   Don't forget to save the workflow (green box)!!
 
-In some instances, you may also want to run the workflow over a collection of parameters (each value corresponding to specific data). This is the case, for instance, for our *TSID* parameter, whose value will be unique for specific variable in each LiPD file in the collection. To set the parameter as a collection, click on it and check *Input should be a Collection* as *true*. If *false*, the same parameter value will be applied to all data in the collection (a desired behavior for the significance level *qs* for instance.)
+In some instances, you may also want to run the workflow over a collection of parameters. This can be done in two ways: 1. dot product (nwise) or 2. cross-product. In a dot product, each value of the parameter corresponds to specific dataset. This is useful, for instance, for our *TSID* parameter, whose value will be unique for specific variable in each LiPD file in the collection. Cross-products are useful to test a set of parameters, for instance, estimating the significance of the spectral peaks at the 90% and 95% confidence level for each of the dataset in the collection.
+
+To set the parameter as a collection, click on it and check *Input should be a Collection* as *true*.
 
 .. image:: /images/Run_ParamCollections.png
 
-To run the workflow, go to Analysis -> Run Workflow and PaleoTS will prompt you to select multiple files (use command+click or option+click on your computer on the dropdown menu).
+To set whether the behavior should be a dot product or a cross-product, first select the component the parameter is an input of. Under the `Input Data Combination` tab (red circle on the picture below), select the default behavior (xproduct) and then click on `Set Op`:
+
+.. image:: /images/Run_nwise.png
+
+Since we want to do a dot product for the loading component (one *TSID* per file), select *nwise*.
+
+Repeat the same procedure for the *qs* parameter, an input to the significance testing component but select *xproduct*:
+
+.. image:: /images/Run_xproduct.png
+
+.. warning::
+  Don't forget to save the workflow!!
+
+To run the workflow, go to Analysis -> Run Workflow and PaleoTS will prompt you to select multiple files (use command+click or option+click on your computer on the dropdown menu) and enter the parameter values as comma-separated values.
 
 Understanding data types
 ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -150,13 +165,13 @@ Let's have a look at the different types of data PaleoTS is currently working wi
 
 Each folder in the tree represents a type of data (:ref:`data type <Data Type>`). Each subfolder means that a particular data type is a child of the parent folder. In short, they share common characteristics but also differences. The choice of data types is dictated by needs and ease of navigation. So far, all of the inputs/outputs in our workflows are either image files (plots) or JSON files (which contains all our data). Hence, it made sense to create types that correspond to these two file formats.
 
-We also have a special category of "InputData" which can either be a time series stored in JSON format or in LiPD format. Why couldn't we put time series under JSONFile? We could have; but separate workflows for each type of files would have been needed since PaleoTS can only reason on 'loadTS' if the inputs are of the same type (in this case *InputData*). So *InputData* was created for convenience.
+We also have a special category of "InputData" which can either be a time series stored in JSON format or in LiPD format. Why couldn't we put time series under JSONFile? We could have. However, separate workflows for each type of files would have been needed since PaleoTS can only reason on 'loadTS' if the inputs are of the same type (in this case *InputData*). So *InputData* was created for convenience.
 
 Select the folder *TimeSeries* and have a look at the different tabs:
 
 .. image:: /images/Data_TimeSeries.png
 
-Under *Metadata Properties*, two properties are considered: *isEvenlySpaced* and *hasTrend*, which are needed to reason over the steps in the workflow. If you click on the *Metadata Extractor* tab, you should see the following:
+Under *Metadata Properties*, three properties are considered: *isEvenlySpaced*, *needsEvenlySpaced*, and *hasTrend*, which are needed to reason over the steps in the workflow. If you click on the *Metadata Extractor* tab, you should see the following:
 
 .. image:: /images/Data_extractor.png
 
@@ -361,29 +376,287 @@ The second box concerns itself with the parameters that affect the behavior of t
 * settings (dict), which represents a dictionary of arguments for the specific method. These arguments should be passed to the :ref:`executable components <Executable workflow>` corresponding to the various methods directly.
 * freq_kwargs (str): which modifies the behavior of the *freq_method*. For PaleoTS, we made the assumption that the default behavior will be appropriate in all cases and we therefore dropped the option to modify how the frequency vector is obtained from the various methods listed in *freq_method*. If this is deemed important, then :ref:`executable components <Executable workflow>` with the various options should be created and the *freq_method* argument removed from the :ref:`abstract component <Abstract workflow>`
 
-In our case, only the `freq_method` argument is applicable across all functionalities and is therefore passed as a parameter.
+In our case, only the `freq_method` argument is applicable across all functionalities and is therefore passed as a parameter. These parameters are shown in the abstract workflow that can be set first when running a workflow.
 
 The output data, appropriately named *OutputPSD*, is of type *PowerSpectralDensity*. In short, we have informed PaleoTS that the result of a spectral analysis is a Power Spectral Density. If desired, a plot can be made and saved as an additional output. In this case, we refrain from doing so until the *SpectralSignificanceTesting* step.
 
 Rules
 *****
 
-The second tab corresponds to rules that we want PaleoTS to follow according to the data. The spectral component tab doesn't contain any special rules so let's head over to *Detrend* under the PreProcessing folder. 
+The second tab corresponds to rules that we want PaleoTS to follow according to the data. The spectral component tab doesn't contain any special rules so let's head over to *Detrend* under the PreProcessing folder. Select the :ref:`abstract component <Abstract workflow>` and go to the rules tab. You should see the following:
+
+.. image:: /images/Rules_noop.png
+
+The first line informs us that this is non-operation rule (i.e., under certain conditions, skip the component.) In this particular case, we told PaleoTS to not use a detrending operation if there is no trend sensed in the data. Since this rule is applicable regardless of the detrending method (linear or filtering), it makes sense to have it at the abstract component level.
+
+Documentation
+*************
+
+The next tab allows you to write some documentation for your component. As a general rule we did not write any for the abstract components.
+
+Provenance
+**********
+
+The last tab allows you to keep some information about the provenance of the component.
+
+Executable Component
+--------------------
+
+Next, let's have a look at an executable component. Click on the *Lomb-Scargle* method under *Spectral*:
+
+.. image:: /images/Component_executableIO.png
+
+You should find some familiar tabs (i.e., IO, rules, documentation, and provenance) in addition to two new ones: code (yes, this is where you would enter the code!) and dependencies. Let's start with the tabs we are familiar with.
+
+IO
+***
+
+The interface should look familiar and you should notice that some of the parameters from the abstract components were transferred over. However, there are some additional paramters that are specific to these methods:
+
+* `n50`: The number of 50% overlapping segment,
+* `window`: the type of window to apply,
+* `average`: How to take the average (mean or median) across the PSD segments.
+
+How would you know what these parameters correspond to? Well, this is where the documentation tab is useful.
+
+Documentation
+*************
+
+Let's head over to the documentation tab:
+
+.. image:: /images/Component_documentation.png
+
+Here, we link to the Pyleoclim documentation. Why? Well, this is to ensure that we can keep it up to date at the source (the container) instead of rewriting it in the tab every time the Pyleoclim version updates.
+
+Rules
+*****
+
+Click on the *Rules* tab.
+
+.. image:: /images/Rules_backward_meta.png
+
+This is where we inform PaleoTS that the Lomb-Scargle method doesn't require evenly-spaced data. It works in combination with the rules applied to the *HypothesizeOverMissingData* component. Click on that particular :ref:`abstract component <Abstract workflow>` and look at the rules:
+
+
+.. image:: /images/Rules_skip.png
+
+This is where our skip rules are. The first rule is similar to the one we use for detrending: if the input timeseries is already evenly-spaced, then there is no need to run this step. The second rule essentially acts on the output timeseries. If the output doesn't need to be evenly-spaced, then apply the non-operation rule.
+
+Dependencies
+************
+
+This tab allows you to specify dependencies for your code:
+
+.. image:: /images/Component_dependencies.png
+
+We do not use this tab in PaleoTS since we are using containers to set version/environment for the code. This is the preferred method.
+
+Code
+****
+
+As the name indicates, this is where the computational action is encoded:
+
+.. image:: /images/Component_Code_io.png
+
+You can see that the LombScargle folder (component name) contains three files. Let's have a look at all of them.
+
+- *io.sh* contains information about input/output. You will never have to touch this file nor generate it by yourself (we will talk about this in more details when :ref:`learning to create new components <Creating new components>`).
+
+- *run* is essentially the bash script to launch the code. Let's have a look at it:
+
+.. image:: /images/Component_Code_run.png
+
+Line 11 sets the directory for the code.
+
+Line 13 initiates *io.sh* by declaring how many inputs (first number), parameters (second number) and output (third number) to expect.
+
+.. warning::
+  These numbers need to be consistent with the numbers of inputs, parameters, and outputs that you have on the IO tab.
+
+Line 16 identifies the `Docker image <https://www.techtarget.com/searchitoperations/definition/Docker-image>`_ from which we run our Python code.
+
+Line 17 identifies the data directory. This line needs to be there to inform the system where to get the data from.
+
+Line 18 sets up the docker command to run from the container.
+
+Line 20 invokes the Python code needed and passes the value of the parameters.
+
+- *LombScargle.py* contains the Python code that executes the Lomb-Scargle algorithm:
+
+.. image:: /images/Component_Code_python.png
+
+Lines 1 and 2 imports the needed packages
+
+Lines 5-15 parses the inputs/parameters/outputs set from the command line in the *run* file. Here, we use the `argparse <https://docs.python.org/3/library/argparse.html>`_ package to do so.
+
+Line 18 prints the arguments on the console so you can check the work under the run log tab in the Runs page.
+
+Line 21 loads the timeseries into a `Pyleoclim Series object <https://pyleoclim-util.readthedocs.io/en/master/core/api.html#series-pyleoclim-series>`_.
+
+Line 23 sets a dictionary with the parameters specific to the Lomb-Scargle method.
+
+Line 25 invokes the <Pyleoclim spectral functionality <https://pyleoclim-util.readthedocs.io/en/master/core/api.html#pyleoclim.core.series.Series.spectral>`_ using the Lomb-Scargle method and with the desired parameter values.
+
+Line 26 exports the `Pyleoclim PSD object <https://pyleoclim-util.readthedocs.io/en/master/core/api.html#psd-pyleoclim-psd>`_ into a JSON file for the output.
 
 Updating the version of Pyleoclim
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+As Pyleoclim continues to evolve, you may want to update your version of the code. We made this simple using a workflow *DockerPull-Pyleoclim*. Go to Analysis -> Run Workflow and select this particular workflow:
+
+.. image:: /images/Pyleoclim_update.png
+
+Notice that the component is executable (no :ref:`abstract workflow <Abstract workflow>`) and takes a single parameter *dummy*. As the name indicates, the parameter doesn't affect the code but it is necessary for PaleoTS to know to run this component (remember that PaleoTS will not run the same component twice if the version hasn't changed and/or the parameters remain the same.)
+
+Enter a parameter value of your choice and run the workflow. Look at the run log on the Analysis->Access Runs page:
+
+
+The run log will print out the version of Pyleoclim you are now using!
+
+.. warning::
+  Updating Pyleoclim will give you access to new functionalities, which may require you to :ref:`create new components <Creating new components>` as well as changes in existing APIs, which may require :ref:`updates to existing components <Updating existing components>`. If you are unsure on how to change the code, please `contact us <mailto:linkedearth@gmail.com>`_.
+
+There is one more step, which consists of updating the version of every component so PaleoTS knows to rerun the code even if the inputs haven't changed. Go to Advanced -> Manage Components and right click on the top *Component* folder, then select *clear cache* (red circle):
+
+.. image:: /images/Component_updateall.png
+
+You can now run or re-run your workflows with the newest version of Pyleoclim.
+
+Updating existing components
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+You may need to update existing components because (1) you desire more inputs/parameters/outputs, (2) the API to the software you are invoking have changed, (3) you decide to use a similar functionality in a different package. In any case, you may be called to (1) update IO and/or (2) update the code. Let's have a look on how to do this. Note that the changes made in the screenshots used in this section were not saved to PaleoTS (and are, therefore, not available at login).
+
+Updating IO
+-----------
+
+You may need to update IO either because the APIs have changed or because you would like to add parameters/inputs/outputs. Note that in most cases, these will require changes to the code.
+
+Let's have a look at the *loadLipd* :ref:`executable component <Executable Workflow>`:
+
+.. image:: /images/Modifying_IO.png
+
+And let's assume that I want to add another parameter that searches by variable name instead of TSID. Let's create a parameter called *varName* by clicking on the *Add* button below *InputParameters*:
+
+.. image:: /images/Modifying_AddParameter.png
+
+The type should be *string* and let's give it a default value of *NA* since we want to be able to toggle between *TSID* and *varName* in the code. You should obtain this:
+
+.. image:: /images/Modifying_ParameterResult.png
+
+Go ahead and save the IO before heading to the code tab.
+
+.. note::
+  You can follow the same process to edit an :ref:`abstract component <Abstract workflow>`. Be aware that these changes will not be automatically applied to existing :ref:`executable components <Executable workflow>` the :ref:`abstract component <Abstract workflow>` applies to. Don't forget to add/remove any inputs/parameters/outputs to these components as well.
+
+Updating the code
+-----------------
+
+The original *run* file shows the following:
+
+.. image:: /images/Modifying_RunOri.png
+
+We need to modify both line 12 and line 19, which specifies the number and values of the parameters as follow:
+
+.. image:: /images/Modifying_Run.png
+
+.. warning::
+  Don't forget to save this file before navigating away from the tab. In this case, we are not interested in keeping the changes, so the file will remain unsaved as indicated by the asterisk near the file name.
+
+The next step is to change the Python code:
+
+.. image:: /images/Modifying_PythonOri.png
+
+The first step will be to add a *argparse* line that take into account our new parameter before writing a function that would filter by variable name. Don't forget to put an if statement to decide whether to use the *TSID* or the *varName*!
+
+Let's close the tabs without saving our chasing and head over to the IO tab to remove our parameter. Select the varName parameter box and click *Delete*, then save:
+
+.. image:: /images/Modifying_Deleting.png
+
+Fixing to a specific version of Pyleoclim
+-----------------------------------------
+
+In some cases, you may not wish to update Pyleoclim at all, or not update every component with the newest version. We keep all the containers for Pyleoclim dedicated to PaleoTS on `quay.io <https://quay.io/repository/linkedearth/paleots?tab=tags>`_. By default, we use the latest image; however, you may choose to use any images as long as they are stored on the system. To see a list of the Pyleoclim version in each image, visit our `GitHub page <https://github.com/LinkedEarth/paleoTS>`_.
+
+You can do so by using the *DockerPull-Pyleoclim* workflow and updating the *PullPyleoclim* :ref:`executable component <Executable workflow>` located under the *Maintenance* folder in *Manage Components*:
+
+.. image:: /images/Modifying_PullPyleoclim.png
+
+On line 16, replace latest by the image tag (e.g., *1739e52d17da* for v0.9.0 of Pyleoclim). Notice the command on line 17 which instructs the system to pull this particular image. Save the component and run the workflow.
+
+Once this is done, you will also need to change the name of the image for every command you wish this change will apply to. For instance, using the *LombScargle* component from before:
+
+.. image:: /images/Component_Code_run.png
+
+You will need to update line 16 with the image tag you desire (in our example, *1739e52d17da*).
+
+.. note::
+  You may need to change the documentation to reflect the version of Pyleoclim you are using for this particular component. The documentation for each version of Pyleoclim is archived. For instance, the documentation for v0.9.0 is available at: `https://pyleoclim-util.readthedocs.io/en/v0.9.0/core/api.html <https://pyleoclim-util.readthedocs.io/en/v0.9.0/core/api.html>`_ Note the version number in the URL name. This is all you would have to change in the documentation.
+
 Creating new components
 ^^^^^^^^^^^^^^^^^^^^^^^
+
+You may also want to create new components. Let's start by writing a new components with packages available through the Pyleoclim container. You can find a list of these packages `here <https://github.com/LinkedEarth/paleoTS/blob/main/environment.yml>`_ for the latest version of the image. Pyleoclim also relies on the packages listed in `this file <https://github.com/LinkedEarth/Pyleoclim_util/blob/master/setup.py>`_, which are also accessible within the container. As you can see, a majority of the packages comprising the scientific Python stack are already available.
+
+Let's assume that I want to create a workflow that takes a collection of LiPD files and return all the timeseries data into a csv table. Conceptually, the workflow would look like:
+
+.. image:: /images/Workflow_Sketch.png
+
+Sketching the workflow is often useful to think about the different pieces. The `ASSET tool <https://asset.isi.edu>`_ was used here, but a hand drawing/Powerpoint is sufficient in most cases. Let's first think about the :ref:`data types <Data Type>` involved in this workflow: LiPD files as inputs and a csv file as an output.
+
+A quick look at the available :ref:`data types <Data Type>` in  the system tells us that both have already been defined:
+
+.. image:: /images/NewComponent_DataType.png
+
+However, it makes sense to think about whether the generic csv type is sufficient. If you remember our discussion on :ref:`data types <Data Type>`, they are more than a simple file format but also define the kind of operations that can be performed on these particular data. Take the example of timeseries: the data is stored in JSON format but the keys in the JSON files are compatible with the `Pyleoclim Series object <https://pyleoclim-util.readthedocs.io/en/master/core/api.html#series-pyleoclim-series>`_ on which the computations are performed. Therefore, you could expect different :ref:`data types <Data Type>` based on what you will need the data for.
+
+Since we are only interested in this small workflow example, let's use the broad csv category for the output.
+
+The second step is to think about the algorithm: first I will need to open the files, extract the timeseries in each file and store each timeseries as a row in a table with some metadata attached. In short, I want to obtain a table similar to the `one displayed in this notebook <https://github.com/LinkedEarth/pyleoDB/blob/main/IPWP_millennial_cycles.ipynb>`_:
+
+.. image:: /images/NewComponent_Table.png
+
+All of these can be achieved through packages already available through the container: lipd, a package meant to work with paleoclimate data in the LiPD format, pandas to create the table and export it as a csv.
+
+Next, let's consider which/if folder/:ref:`abstract component <Abstract workflow>` our new code could correspond to. There is a folder named *LoadData*, which seems like a good place to start. PaleoTS already contains two abstract workflows:
+
+.. image:: /images/NewComponent_LoadData.png
+
+Let's consider whether one of them could work for our purpose. The *LipdtoTS* component takes data in the LiPD :ref:`data types <Data Type>`, which is what we want, but returns a TimeSeries :ref:`data types <Data Type>`:
+
+.. image:: /images/NewComponent_LiPDtoTS.png
+
+But we need a csv :ref:`data types <Data Type>`. On the other hand, the *LoadTS* component takes an InputData :ref:`data types <Data Type>` (remember that InputData is either TimeSeries or LiPD; hence the two :ref:`executable component <Executable workflow>` to deal with each type of inputs) and returns a TimeSeries and a plot:
+
+.. image:: /images/NewComponent_loadTS.png
+
+This component will not work either for our purpose. So let's create a new :ref:`abstract component <Abstract workflow>`, called LiPDtoTable. To do so, right click on the *LoadData* folder and select *Add Component Type*:
+
+.. image:: /images/NewComponent_Create.png
+
+When prompted, enter the name *LiPDtoTable*.
+
+.. note::
+    In this case, we could have created an :ref:`executable components <Executable workflow>` directly.
+
+With your new :ref:`abstract component <Abstract workflow>` selected, enter the appropriate information in the I/O tab: Input should be of type LiPD and the output of type csv. There is not need for parameters for this component.
+
+.. image:: /images/NewComponent_IO.png
+
+.. warning::
+  Don't forget to save!!
+
+We now need to create the :ref:`executable component <Executable workflow>` corresponding to this :ref:`abstract component <Abstract workflow>`. Right-click on the :ref:`abstract component <Abstract workflow>` and select *Add Component*:
+
+.. image:: /images/NewComponent_CreateExecutable.png
+
+And enter the name *LiPD_to_Table* when prompted. Notice that the puzzle piece is red instead of orange, signaling that the code is missing from the :ref:`executable component <Executable workflow>`. 
 
 Using your own packages
 -----------------------
 
 Adding rules
-------------
+^^^^^^^^^^^^
 
-Updating existing components
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Terminology
 ^^^^^^^^^^^

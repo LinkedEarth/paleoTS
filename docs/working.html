@@ -113,17 +113,32 @@
 <li class="toctree-l3"><a class="reference internal" href="#abstract-component">Abstract Component</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#i-o">I/O</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#rules">Rules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#documentation">Documentation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#provenance">Provenance</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#executable-component">Executable Component</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#io">IO</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1">Documentation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">Rules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dependencies">Dependencies</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#code">Code</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#updating-the-version-of-pyleoclim">Updating the version of Pyleoclim</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#creating-new-components">Creating new components</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#using-your-own-packages">Using your own packages</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#adding-rules">Adding rules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#updating-existing-components">Updating existing components</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#updating-io">Updating IO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#updating-the-code">Updating the code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fixing-to-a-specific-version-of-pyleoclim">Fixing to a specific version of Pyleoclim</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#updating-existing-components">Updating existing components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-new-components">Creating new components</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#using-your-own-packages">Using your own packages</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#adding-rules">Adding rules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#terminology">Terminology</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#abstract-workflow">Abstract workflow</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#executable-workflow">Executable workflow</a></li>
@@ -278,9 +293,19 @@
 <p class="admonition-title">Warning</p>
 <p>Don’t forget to save the workflow (green box)!!</p>
 </div>
-<p>In some instances, you may also want to run the workflow over a collection of parameters (each value corresponding to specific data). This is the case, for instance, for our <em>TSID</em> parameter, whose value will be unique for specific variable in each LiPD file in the collection. To set the parameter as a collection, click on it and check <em>Input should be a Collection</em> as <em>true</em>. If <em>false</em>, the same parameter value will be applied to all data in the collection (a desired behavior for the significance level <em>qs</em> for instance.)</p>
+<p>In some instances, you may also want to run the workflow over a collection of parameters. This can be done in two ways: 1. dot product (nwise) or 2. cross-product. In a dot product, each value of the parameter corresponds to specific dataset. This is useful, for instance, for our <em>TSID</em> parameter, whose value will be unique for specific variable in each LiPD file in the collection. Cross-products are useful to test a set of parameters, for instance, estimating the significance of the spectral peaks at the 90% and 95% confidence level for each of the dataset in the collection.</p>
+<p>To set the parameter as a collection, click on it and check <em>Input should be a Collection</em> as <em>true</em>.</p>
 <img alt="_images/Run_ParamCollections.png" src="_images/Run_ParamCollections.png" />
-<p>To run the workflow, go to Analysis -&gt; Run Workflow and PaleoTS will prompt you to select multiple files (use command+click or option+click on your computer on the dropdown menu).</p>
+<p>To set whether the behavior should be a dot product or a cross-product, first select the component the parameter is an input of. Under the <cite>Input Data Combination</cite> tab (red circle on the picture below), select the default behavior (xproduct) and then click on <cite>Set Op</cite>:</p>
+<img alt="_images/Run_nwise.png" src="_images/Run_nwise.png" />
+<p>Since we want to do a dot product for the loading component (one <em>TSID</em> per file), select <em>nwise</em>.</p>
+<p>Repeat the same procedure for the <em>qs</em> parameter, an input to the significance testing component but select <em>xproduct</em>:</p>
+<img alt="_images/Run_xproduct.png" src="_images/Run_xproduct.png" />
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Don’t forget to save the workflow!!</p>
+</div>
+<p>To run the workflow, go to Analysis -&gt; Run Workflow and PaleoTS will prompt you to select multiple files (use command+click or option+click on your computer on the dropdown menu) and enter the parameter values as comma-separated values.</p>
 </section>
 </section>
 <section id="understanding-data-types">
@@ -289,10 +314,10 @@
 <p>Let’s have a look at the different types of data PaleoTS is currently working with. Click on Advanced -&gt; Manage Data:</p>
 <img alt="_images/Data_DataTypes.png" src="_images/Data_DataTypes.png" />
 <p>Each folder in the tree represents a type of data (<a class="reference internal" href="#data-type"><span class="std std-ref">data type</span></a>). Each subfolder means that a particular data type is a child of the parent folder. In short, they share common characteristics but also differences. The choice of data types is dictated by needs and ease of navigation. So far, all of the inputs/outputs in our workflows are either image files (plots) or JSON files (which contains all our data). Hence, it made sense to create types that correspond to these two file formats.</p>
-<p>We also have a special category of “InputData” which can either be a time series stored in JSON format or in LiPD format. Why couldn’t we put time series under JSONFile? We could have; but separate workflows for each type of files would have been needed since PaleoTS can only reason on ‘loadTS’ if the inputs are of the same type (in this case <em>InputData</em>). So <em>InputData</em> was created for convenience.</p>
+<p>We also have a special category of “InputData” which can either be a time series stored in JSON format or in LiPD format. Why couldn’t we put time series under JSONFile? We could have. However, separate workflows for each type of files would have been needed since PaleoTS can only reason on ‘loadTS’ if the inputs are of the same type (in this case <em>InputData</em>). So <em>InputData</em> was created for convenience.</p>
 <p>Select the folder <em>TimeSeries</em> and have a look at the different tabs:</p>
 <img alt="_images/Data_TimeSeries.png" src="_images/Data_TimeSeries.png" />
-<p>Under <em>Metadata Properties</em>, two properties are considered: <em>isEvenlySpaced</em> and <em>hasTrend</em>, which are needed to reason over the steps in the workflow. If you click on the <em>Metadata Extractor</em> tab, you should see the following:</p>
+<p>Under <em>Metadata Properties</em>, three properties are considered: <em>isEvenlySpaced</em>, <em>needsEvenlySpaced</em>, and <em>hasTrend</em>, which are needed to reason over the steps in the workflow. If you click on the <em>Metadata Extractor</em> tab, you should see the following:</p>
 <img alt="_images/Data_extractor.png" src="_images/Data_extractor.png" />
 <p>Notice that <em>TSMetadataExtraction</em> is selected, which is the component making up the entire <em>Extract_Timeseries</em> workflow that we introduced in the <a class="reference internal" href="#running-a-workflow"><span class="std std-ref">introduction</span></a>.</p>
 <p>Click on <em>test_perfect_signal.json</em>, which is the input we used in our example workflow:</p>
@@ -430,29 +455,198 @@
 <li><p>settings (dict), which represents a dictionary of arguments for the specific method. These arguments should be passed to the <a class="reference internal" href="#executable-workflow"><span class="std std-ref">executable components</span></a> corresponding to the various methods directly.</p></li>
 <li><p>freq_kwargs (str): which modifies the behavior of the <em>freq_method</em>. For PaleoTS, we made the assumption that the default behavior will be appropriate in all cases and we therefore dropped the option to modify how the frequency vector is obtained from the various methods listed in <em>freq_method</em>. If this is deemed important, then <a class="reference internal" href="#executable-workflow"><span class="std std-ref">executable components</span></a> with the various options should be created and the <em>freq_method</em> argument removed from the <a class="reference internal" href="#abstract-workflow"><span class="std std-ref">abstract component</span></a></p></li>
 </ul>
-<p>In our case, only the <cite>freq_method</cite> argument is applicable across all functionalities and is therefore passed as a parameter.</p>
+<p>In our case, only the <cite>freq_method</cite> argument is applicable across all functionalities and is therefore passed as a parameter. These parameters are shown in the abstract workflow that can be set first when running a workflow.</p>
 <p>The output data, appropriately named <em>OutputPSD</em>, is of type <em>PowerSpectralDensity</em>. In short, we have informed PaleoTS that the result of a spectral analysis is a Power Spectral Density. If desired, a plot can be made and saved as an additional output. In this case, we refrain from doing so until the <em>SpectralSignificanceTesting</em> step.</p>
 </section>
 <section id="rules">
 <h4>Rules<a class="headerlink" href="#rules" title="Permalink to this heading">¶</a></h4>
-<p>The second tab corresponds to rules that we want PaleoTS to follow according to the data. The spectral component tab doesn’t contain any special rules so let’s head over to <em>Detrend</em> under the PreProcessing folder.</p>
+<p>The second tab corresponds to rules that we want PaleoTS to follow according to the data. The spectral component tab doesn’t contain any special rules so let’s head over to <em>Detrend</em> under the PreProcessing folder. Select the <a class="reference internal" href="#abstract-workflow"><span class="std std-ref">abstract component</span></a> and go to the rules tab. You should see the following:</p>
+<img alt="_images/Rules_noop.png" src="_images/Rules_noop.png" />
+<p>The first line informs us that this is non-operation rule (i.e., under certain conditions, skip the component.) In this particular case, we told PaleoTS to not use a detrending operation if there is no trend sensed in the data. Since this rule is applicable regardless of the detrending method (linear or filtering), it makes sense to have it at the abstract component level.</p>
+</section>
+<section id="documentation">
+<h4>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading">¶</a></h4>
+<p>The next tab allows you to write some documentation for your component. As a general rule we did not write any for the abstract components.</p>
+</section>
+<section id="provenance">
+<h4>Provenance<a class="headerlink" href="#provenance" title="Permalink to this heading">¶</a></h4>
+<p>The last tab allows you to keep some information about the provenance of the component.</p>
+</section>
+</section>
+<section id="executable-component">
+<h3>Executable Component<a class="headerlink" href="#executable-component" title="Permalink to this heading">¶</a></h3>
+<p>Next, let’s have a look at an executable component. Click on the <em>Lomb-Scargle</em> method under <em>Spectral</em>:</p>
+<img alt="_images/Component_executableIO.png" src="_images/Component_executableIO.png" />
+<p>You should find some familiar tabs (i.e., IO, rules, documentation, and provenance) in addition to two new ones: code (yes, this is where you would enter the code!) and dependencies. Let’s start with the tabs we are familiar with.</p>
+<section id="io">
+<h4>IO<a class="headerlink" href="#io" title="Permalink to this heading">¶</a></h4>
+<p>The interface should look familiar and you should notice that some of the parameters from the abstract components were transferred over. However, there are some additional paramters that are specific to these methods:</p>
+<ul class="simple">
+<li><p><cite>n50</cite>: The number of 50% overlapping segment,</p></li>
+<li><p><cite>window</cite>: the type of window to apply,</p></li>
+<li><p><cite>average</cite>: How to take the average (mean or median) across the PSD segments.</p></li>
+</ul>
+<p>How would you know what these parameters correspond to? Well, this is where the documentation tab is useful.</p>
+</section>
+<section id="id1">
+<h4>Documentation<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h4>
+<p>Let’s head over to the documentation tab:</p>
+<img alt="_images/Component_documentation.png" src="_images/Component_documentation.png" />
+<p>Here, we link to the Pyleoclim documentation. Why? Well, this is to ensure that we can keep it up to date at the source (the container) instead of rewriting it in the tab every time the Pyleoclim version updates.</p>
+</section>
+<section id="id2">
+<h4>Rules<a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h4>
+<p>Click on the <em>Rules</em> tab.</p>
+<img alt="_images/Rules_backward_meta.png" src="_images/Rules_backward_meta.png" />
+<p>This is where we inform PaleoTS that the Lomb-Scargle method doesn’t require evenly-spaced data. It works in combination with the rules applied to the <em>HypothesizeOverMissingData</em> component. Click on that particular <a class="reference internal" href="#abstract-workflow"><span class="std std-ref">abstract component</span></a> and look at the rules:</p>
+<img alt="_images/Rules_skip.png" src="_images/Rules_skip.png" />
+<p>This is where our skip rules are. The first rule is similar to the one we use for detrending: if the input timeseries is already evenly-spaced, then there is no need to run this step. The second rule essentially acts on the output timeseries. If the output doesn’t need to be evenly-spaced, then apply the non-operation rule.</p>
+</section>
+<section id="dependencies">
+<h4>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this heading">¶</a></h4>
+<p>This tab allows you to specify dependencies for your code:</p>
+<img alt="_images/Component_dependencies.png" src="_images/Component_dependencies.png" />
+<p>We do not use this tab in PaleoTS since we are using containers to set version/environment for the code. This is the preferred method.</p>
+</section>
+<section id="code">
+<h4>Code<a class="headerlink" href="#code" title="Permalink to this heading">¶</a></h4>
+<p>As the name indicates, this is where the computational action is encoded:</p>
+<img alt="_images/Component_Code_io.png" src="_images/Component_Code_io.png" />
+<p>You can see that the LombScargle folder (component name) contains three files. Let’s have a look at all of them.</p>
+<ul class="simple">
+<li><p><em>io.sh</em> contains information about input/output. You will never have to touch this file nor generate it by yourself (we will talk about this in more details when <a class="reference internal" href="#creating-new-components"><span class="std std-ref">learning to create new components</span></a>).</p></li>
+<li><p><em>run</em> is essentially the bash script to launch the code. Let’s have a look at it:</p></li>
+</ul>
+<img alt="_images/Component_Code_run.png" src="_images/Component_Code_run.png" />
+<p>Line 11 sets the directory for the code.</p>
+<p>Line 13 initiates <em>io.sh</em> by declaring how many inputs (first number), parameters (second number) and output (third number) to expect.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>These numbers need to be consistent with the numbers of inputs, parameters, and outputs that you have on the IO tab.</p>
+</div>
+<p>Line 16 identifies the <a class="reference external" href="https://www.techtarget.com/searchitoperations/definition/Docker-image">Docker image</a> from which we run our Python code.</p>
+<p>Line 17 identifies the data directory. This line needs to be there to inform the system where to get the data from.</p>
+<p>Line 18 sets up the docker command to run from the container.</p>
+<p>Line 20 invokes the Python code needed and passes the value of the parameters.</p>
+<ul class="simple">
+<li><p><em>LombScargle.py</em> contains the Python code that executes the Lomb-Scargle algorithm:</p></li>
+</ul>
+<img alt="_images/Component_Code_python.png" src="_images/Component_Code_python.png" />
+<p>Lines 1 and 2 imports the needed packages</p>
+<p>Lines 5-15 parses the inputs/parameters/outputs set from the command line in the <em>run</em> file. Here, we use the <a class="reference external" href="https://docs.python.org/3/library/argparse.html">argparse</a> package to do so.</p>
+<p>Line 18 prints the arguments on the console so you can check the work under the run log tab in the Runs page.</p>
+<p>Line 21 loads the timeseries into a <a class="reference external" href="https://pyleoclim-util.readthedocs.io/en/master/core/api.html#series-pyleoclim-series">Pyleoclim Series object</a>.</p>
+<p>Line 23 sets a dictionary with the parameters specific to the Lomb-Scargle method.</p>
+<p>Line 25 invokes the &lt;Pyleoclim spectral functionality &lt;<a class="reference external" href="https://pyleoclim-util.readthedocs.io/en/master/core/api.html#pyleoclim.core.series.Series.spectral">https://pyleoclim-util.readthedocs.io/en/master/core/api.html#pyleoclim.core.series.Series.spectral</a>&gt;`_ using the Lomb-Scargle method and with the desired parameter values.</p>
+<p>Line 26 exports the <a class="reference external" href="https://pyleoclim-util.readthedocs.io/en/master/core/api.html#psd-pyleoclim-psd">Pyleoclim PSD object</a> into a JSON file for the output.</p>
 </section>
 </section>
 </section>
 <section id="updating-the-version-of-pyleoclim">
 <h2>Updating the version of Pyleoclim<a class="headerlink" href="#updating-the-version-of-pyleoclim" title="Permalink to this heading">¶</a></h2>
-</section>
-<section id="creating-new-components">
-<h2>Creating new components<a class="headerlink" href="#creating-new-components" title="Permalink to this heading">¶</a></h2>
-<section id="using-your-own-packages">
-<h3>Using your own packages<a class="headerlink" href="#using-your-own-packages" title="Permalink to this heading">¶</a></h3>
-</section>
-<section id="adding-rules">
-<h3>Adding rules<a class="headerlink" href="#adding-rules" title="Permalink to this heading">¶</a></h3>
-</section>
+<p>As Pyleoclim continues to evolve, you may want to update your version of the code. We made this simple using a workflow <em>DockerPull-Pyleoclim</em>. Go to Analysis -&gt; Run Workflow and select this particular workflow:</p>
+<img alt="_images/Pyleoclim_update.png" src="_images/Pyleoclim_update.png" />
+<p>Notice that the component is executable (no <a class="reference internal" href="#abstract-workflow"><span class="std std-ref">abstract workflow</span></a>) and takes a single parameter <em>dummy</em>. As the name indicates, the parameter doesn’t affect the code but it is necessary for PaleoTS to know to run this component (remember that PaleoTS will not run the same component twice if the version hasn’t changed and/or the parameters remain the same.)</p>
+<p>Enter a parameter value of your choice and run the workflow. Look at the run log on the Analysis-&gt;Access Runs page:</p>
+<p>The run log will print out the version of Pyleoclim you are now using!</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Updating Pyleoclim will give you access to new functionalities, which may require you to <a class="reference internal" href="#creating-new-components"><span class="std std-ref">create new components</span></a> as well as changes in existing APIs, which may require <a class="reference internal" href="#updating-existing-components"><span class="std std-ref">updates to existing components</span></a>. If you are unsure on how to change the code, please <a class="reference external" href="mailto:linkedearth&#37;&#52;&#48;gmail&#46;com">contact us</a>.</p>
+</div>
+<p>There is one more step, which consists of updating the version of every component so PaleoTS knows to rerun the code even if the inputs haven’t changed. Go to Advanced -&gt; Manage Components and right click on the top <em>Component</em> folder, then select <em>clear cache</em> (red circle):</p>
+<img alt="_images/Component_updateall.png" src="_images/Component_updateall.png" />
+<p>You can now run or re-run your workflows with the newest version of Pyleoclim.</p>
 </section>
 <section id="updating-existing-components">
 <h2>Updating existing components<a class="headerlink" href="#updating-existing-components" title="Permalink to this heading">¶</a></h2>
+<p>You may need to update existing components because (1) you desire more inputs/parameters/outputs, (2) the API to the software you are invoking have changed, (3) you decide to use a similar functionality in a different package. In any case, you may be called to (1) update IO and/or (2) update the code. Let’s have a look on how to do this. Note that the changes made in the screenshots used in this section were not saved to PaleoTS (and are, therefore, not available at login).</p>
+<section id="updating-io">
+<h3>Updating IO<a class="headerlink" href="#updating-io" title="Permalink to this heading">¶</a></h3>
+<p>You may need to update IO either because the APIs have changed or because you would like to add parameters/inputs/outputs. Note that in most cases, these will require changes to the code.</p>
+<p>Let’s have a look at the <em>loadLipd</em> <a class="reference internal" href="#executable-workflow"><span class="std std-ref">executable component</span></a>:</p>
+<img alt="_images/Modifying_IO.png" src="_images/Modifying_IO.png" />
+<p>And let’s assume that I want to add another parameter that searches by variable name instead of TSID. Let’s create a parameter called <em>varName</em> by clicking on the <em>Add</em> button below <em>InputParameters</em>:</p>
+<img alt="_images/Modifying_AddParameter.png" src="_images/Modifying_AddParameter.png" />
+<p>The type should be <em>string</em> and let’s give it a default value of <em>NA</em> since we want to be able to toggle between <em>TSID</em> and <em>varName</em> in the code. You should obtain this:</p>
+<img alt="_images/Modifying_ParameterResult.png" src="_images/Modifying_ParameterResult.png" />
+<p>Go ahead and save the IO before heading to the code tab.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can follow the same process to edit an <a class="reference internal" href="#abstract-workflow"><span class="std std-ref">abstract component</span></a>. Be aware that these changes will not be automatically applied to existing <a class="reference internal" href="#executable-workflow"><span class="std std-ref">executable components</span></a> the <a class="reference internal" href="#abstract-workflow"><span class="std std-ref">abstract component</span></a> applies to. Don’t forget to add/remove any inputs/parameters/outputs to these components as well.</p>
+</div>
+</section>
+<section id="updating-the-code">
+<h3>Updating the code<a class="headerlink" href="#updating-the-code" title="Permalink to this heading">¶</a></h3>
+<p>The original <em>run</em> file shows the following:</p>
+<img alt="_images/Modifying_RunOri.png" src="_images/Modifying_RunOri.png" />
+<p>We need to modify both line 12 and line 19, which specifies the number and values of the parameters as follow:</p>
+<img alt="_images/Modifying_Run.png" src="_images/Modifying_Run.png" />
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Don’t forget to save this file before navigating away from the tab. In this case, we are not interested in keeping the changes, so the file will remain unsaved as indicated by the asterisk near the file name.</p>
+</div>
+<p>The next step is to change the Python code:</p>
+<img alt="_images/Modifying_PythonOri.png" src="_images/Modifying_PythonOri.png" />
+<p>The first step will be to add a <em>argparse</em> line that take into account our new parameter before writing a function that would filter by variable name. Don’t forget to put an if statement to decide whether to use the <em>TSID</em> or the <em>varName</em>!</p>
+<p>Let’s close the tabs without saving our chasing and head over to the IO tab to remove our parameter. Select the varName parameter box and click <em>Delete</em>, then save:</p>
+<img alt="_images/Modifying_Deleting.png" src="_images/Modifying_Deleting.png" />
+</section>
+<section id="fixing-to-a-specific-version-of-pyleoclim">
+<h3>Fixing to a specific version of Pyleoclim<a class="headerlink" href="#fixing-to-a-specific-version-of-pyleoclim" title="Permalink to this heading">¶</a></h3>
+<p>In some cases, you may not wish to update Pyleoclim at all, or not update every component with the newest version. We keep all the containers for Pyleoclim dedicated to PaleoTS on <a class="reference external" href="https://quay.io/repository/linkedearth/paleots?tab=tags">quay.io</a>. By default, we use the latest image; however, you may choose to use any images as long as they are stored on the system. To see a list of the Pyleoclim version in each image, visit our <a class="reference external" href="https://github.com/LinkedEarth/paleoTS">GitHub page</a>.</p>
+<p>You can do so by using the <em>DockerPull-Pyleoclim</em> workflow and updating the <em>PullPyleoclim</em> <a class="reference internal" href="#executable-workflow"><span class="std std-ref">executable component</span></a> located under the <em>Maintenance</em> folder in <em>Manage Components</em>:</p>
+<img alt="_images/Modifying_PullPyleoclim.png" src="_images/Modifying_PullPyleoclim.png" />
+<p>On line 16, replace latest by the image tag (e.g., <em>1739e52d17da</em> for v0.9.0 of Pyleoclim). Notice the command on line 17 which instructs the system to pull this particular image. Save the component and run the workflow.</p>
+<p>Once this is done, you will also need to change the name of the image for every command you wish this change will apply to. For instance, using the <em>LombScargle</em> component from before:</p>
+<img alt="_images/Component_Code_run.png" src="_images/Component_Code_run.png" />
+<p>You will need to update line 16 with the image tag you desire (in our example, <em>1739e52d17da</em>).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You may need to change the documentation to reflect the version of Pyleoclim you are using for this particular component. The documentation for each version of Pyleoclim is archived. For instance, the documentation for v0.9.0 is available at: <a class="reference external" href="https://pyleoclim-util.readthedocs.io/en/v0.9.0/core/api.html">https://pyleoclim-util.readthedocs.io/en/v0.9.0/core/api.html</a> Note the version number in the URL name. This is all you would have to change in the documentation.</p>
+</div>
+</section>
+</section>
+<section id="creating-new-components">
+<h2>Creating new components<a class="headerlink" href="#creating-new-components" title="Permalink to this heading">¶</a></h2>
+<p>You may also want to create new components. Let’s start by writing a new components with packages available through the Pyleoclim container. You can find a list of these packages <a class="reference external" href="https://github.com/LinkedEarth/paleoTS/blob/main/environment.yml">here</a> for the latest version of the image. Pyleoclim also relies on the packages listed in <a class="reference external" href="https://github.com/LinkedEarth/Pyleoclim_util/blob/master/setup.py">this file</a>, which are also accessible within the container. As you can see, a majority of the packages comprising the scientific Python stack are already available.</p>
+<p>Let’s assume that I want to create a workflow that takes a collection of LiPD files and return all the timeseries data into a csv table. Conceptually, the workflow would look like:</p>
+<img alt="_images/Workflow_Sketch.png" src="_images/Workflow_Sketch.png" />
+<p>Sketching the workflow is often useful to think about the different pieces. The <a class="reference external" href="https://asset.isi.edu">ASSET tool</a> was used here, but a hand drawing/Powerpoint is sufficient in most cases. Let’s first think about the <a class="reference internal" href="#data-type"><span class="std std-ref">data types</span></a> involved in this workflow: LiPD files as inputs and a csv file as an output.</p>
+<p>A quick look at the available <a class="reference internal" href="#data-type"><span class="std std-ref">data types</span></a> in  the system tells us that both have already been defined:</p>
+<img alt="_images/NewComponent_DataType.png" src="_images/NewComponent_DataType.png" />
+<p>However, it makes sense to think about whether the generic csv type is sufficient. If you remember our discussion on <a class="reference internal" href="#data-type"><span class="std std-ref">data types</span></a>, they are more than a simple file format but also define the kind of operations that can be performed on these particular data. Take the example of timeseries: the data is stored in JSON format but the keys in the JSON files are compatible with the <a class="reference external" href="https://pyleoclim-util.readthedocs.io/en/master/core/api.html#series-pyleoclim-series">Pyleoclim Series object</a> on which the computations are performed. Therefore, you could expect different <a class="reference internal" href="#data-type"><span class="std std-ref">data types</span></a> based on what you will need the data for.</p>
+<p>Since we are only interested in this small workflow example, let’s use the broad csv category for the output.</p>
+<p>The second step is to think about the algorithm: first I will need to open the files, extract the timeseries in each file and store each timeseries as a row in a table with some metadata attached. In short, I want to obtain a table similar to the <a class="reference external" href="https://github.com/LinkedEarth/pyleoDB/blob/main/IPWP_millennial_cycles.ipynb">one displayed in this notebook</a>:</p>
+<img alt="_images/NewComponent_Table.png" src="_images/NewComponent_Table.png" />
+<p>All of these can be achieved through packages already available through the container: lipd, a package meant to work with paleoclimate data in the LiPD format, pandas to create the table and export it as a csv.</p>
+<p>Next, let’s consider which/if folder/<a class="reference internal" href="#abstract-workflow"><span class="std std-ref">abstract component</span></a> our new code could correspond to. There is a folder named <em>LoadData</em>, which seems like a good place to start. PaleoTS already contains two abstract workflows:</p>
+<img alt="_images/NewComponent_LoadData.png" src="_images/NewComponent_LoadData.png" />
+<p>Let’s consider whether one of them could work for our purpose. The <em>LipdtoTS</em> component takes data in the LiPD <a class="reference internal" href="#data-type"><span class="std std-ref">data types</span></a>, which is what we want, but returns a TimeSeries <a class="reference internal" href="#data-type"><span class="std std-ref">data types</span></a>:</p>
+<img alt="_images/NewComponent_LiPDtoTS.png" src="_images/NewComponent_LiPDtoTS.png" />
+<p>But we need a csv <a class="reference internal" href="#data-type"><span class="std std-ref">data types</span></a>. On the other hand, the <em>LoadTS</em> component takes an InputData <a class="reference internal" href="#data-type"><span class="std std-ref">data types</span></a> (remember that InputData is either TimeSeries or LiPD; hence the two <a class="reference internal" href="#executable-workflow"><span class="std std-ref">executable component</span></a> to deal with each type of inputs) and returns a TimeSeries and a plot:</p>
+<img alt="_images/NewComponent_loadTS.png" src="_images/NewComponent_loadTS.png" />
+<p>This component will not work either for our purpose. So let’s create a new <a class="reference internal" href="#abstract-workflow"><span class="std std-ref">abstract component</span></a>, called LiPDtoTable. To do so, right click on the <em>LoadData</em> folder and select <em>Add Component Type</em>:</p>
+<img alt="_images/NewComponent_Create.png" src="_images/NewComponent_Create.png" />
+<p>When prompted, enter the name <em>LiPDtoTable</em>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In this case, we could have created an <a class="reference internal" href="#executable-workflow"><span class="std std-ref">executable components</span></a> directly.</p>
+</div>
+<p>With your new <a class="reference internal" href="#abstract-workflow"><span class="std std-ref">abstract component</span></a> selected, enter the appropriate information in the I/O tab: Input should be of type LiPD and the output of type csv. There is not need for parameters for this component.</p>
+<img alt="_images/NewComponent_IO.png" src="_images/NewComponent_IO.png" />
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Don’t forget to save!!</p>
+</div>
+<p>We now need to create the <a class="reference internal" href="#executable-workflow"><span class="std std-ref">executable component</span></a> corresponding to this <a class="reference internal" href="#abstract-workflow"><span class="std std-ref">abstract component</span></a>. Right-click on the <a class="reference internal" href="#abstract-workflow"><span class="std std-ref">abstract component</span></a> and select <em>Add Component</em>:</p>
+<img alt="_images/NewComponent_CreateExecutable.png" src="_images/NewComponent_CreateExecutable.png" />
+<p>And enter the name <em>LiPD_to_Table</em> when prompted. Notice that the puzzle piece is red instead of orange, signaling that the code is missing from the <a class="reference internal" href="#executable-workflow"><span class="std std-ref">executable component</span></a>.</p>
+<section id="using-your-own-packages">
+<h3>Using your own packages<a class="headerlink" href="#using-your-own-packages" title="Permalink to this heading">¶</a></h3>
+</section>
+</section>
+<section id="adding-rules">
+<h2>Adding rules<a class="headerlink" href="#adding-rules" title="Permalink to this heading">¶</a></h2>
 </section>
 <section id="terminology">
 <h2>Terminology<a class="headerlink" href="#terminology" title="Permalink to this heading">¶</a></h2>
