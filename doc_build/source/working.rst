@@ -121,6 +121,9 @@ The :ref:`executable workflow <Executable Workflow>` contains all the informatio
 
 Congratulations! You have run your first analysis with PaleoTS. Feel free to go back and select another of the possible executable workflows.
 
+.. note::
+  If you want to run all possible :ref:`executable workflows <Executable workflow>` for this particular template, select "Plan and Run Workflow". Note that you will not be able to select specific method parameters in this mode. 
+
 Running a workflow with multiple datasets
 -----------------------------------------
 
@@ -153,6 +156,19 @@ Repeat the same procedure for the *qs* parameter, an input to the significance t
   Don't forget to save the workflow!!
 
 To run the workflow, go to Analysis -> Run Workflow and PaleoTS will prompt you to select multiple files (use command+click or option+click on your computer on the dropdown menu) and enter the parameter values as comma-separated values.
+
+Specializing a workflow
+------------------------
+
+In some cases, you may not be interested in running all possible methods corresponding to a specific abstract step. You can either (1) :ref:`create a new workflow <Creating new workflows with existing components>` or (2) specialize the template. Let's look at the second option.
+
+Select the spectral analysis workflow:
+
+.. image:: /images/Run_SpectralAnalysis.png
+
+And
+
+.. image:: /images/Run_specialize.png
 
 Understanding data types
 ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -649,14 +665,58 @@ We now need to create the :ref:`executable component <Executable workflow>` corr
 
 .. image:: /images/NewComponent_CreateExecutable.png
 
-And enter the name *LiPD_to_Table* when prompted. Notice that the puzzle piece is red instead of orange, signaling that the code is missing from the :ref:`executable component <Executable workflow>`. 
+And enter the name *LiPD_to_Table* when prompted. Notice that the puzzle piece is red instead of orange, signaling that the code is missing from the :ref:`executable component <Executable workflow>`.
+
+Select the *Lipd_to_Table* component. Notice that the I/O is already filled from the information we entered in the :ref:`abstract component <Abstract workflow>`. Click on the code tab and select *Initialize* -> Python:
+
+.. image:: /images/NewComponent_Initialize.png
+
+Select yes when prompted to override existing code. PaleoTS created the io.sh, run, and a blank Python script for you to get started. You do not have to touch the io.sh file.
+
+We need to modify the run file to indicate that we want to run from the Pyleoclim container and parse the input/output name:
+
+.. image:: /images/NewComponent_Run.png
+
+.. warning::
+  Don't forget to save!!
+
+Select the newly created python file and enter your code (you can find a version of this code on our `GitHub repo <https://github.com/LinkedEarth/paleoTS>`_):
+
+.. image:: /images/NewComponent_Python.png
+
+You can now :ref:`create a workflow using this new component <Creating new workflows with existing components>`.
+
+.. note::
+  The component has been deleted after making this tutorial and is not available upon download/login into PaleoTS.
 
 Using your own packages
 -----------------------
 
+Although the Pyleoclim containers contain many libraries useful for scientific research, you may want to use your own packages. We recommend using Docker containers for execution inside each component. You can find many packages already in containers on registries such as `DockerHub <https://hub.docker.com/search?q=>`_ or `quay.io <https://quay.io/search>`_.
+
+If you need to containerize your own packages, we recommend using `this tutorial <https://docs.2i2c.org/en/latest/admin/howto/environment/hub-user-image-template-guide.html>`_.
+
 Adding rules
 ^^^^^^^^^^^^
+Under the *Rules* tab, select *Add Rule*:
 
+.. image:: /images/Rules_addrules.png
+
+You will be presented with the following options:
+
+- **Parameter setting rule**: Creates a rule to set a parameter value based on the metadata of any of the other inputs or outputs.
+
+- **Invalidation rule**: Invalidates the component based on all the metadata associated with the inputs (for instance, not applying linear detrending to data with a nonlinear trend). Invalidation rule will stop the workflow (not planning to run this particular combination).
+
+- **No-operation Rule**: Skips a specific component based on either the metadata associated with the inputs/outputs (e.g., do not interpolate already evenly-spaced data). Unlike the invalidation rule, this will not completely stop the workflow, just skip this particular component.
+
+- **Forward Metadata Propagation Rule**: Propagates the metadata of the inputs down the workflow. In PaleoTS, we use this to propagate the *isEvenlySpaced* metadata through the pre-processing steps. It would allow to switch the order of operations in the workflow while holding the rule that some spectral methods don't require evenly-spaced data.
+
+- **Backward Metadata Propagation Rule**: Sets the expected input metadata based on the output metadata. Although it is not used directly in PaleoTS, rules could be set for expectation of the output. For instance, the inputs would need to be in specific units given an output specified units. A data transformation could be added to the workflow and toggled on/off depending on units.
+
+- **Collection Size Rule**: Gives PaleoTS a hint on how big the output collection is for components (not used currently).
+
+When you select a category, PaleoTS will create a template based on the current I/O. You need to add the actual rule! The language used is Jena, which can learn more about `here <https://jena.apache.org/documentation/inference/#RULEbuiltins>`_.
 
 Terminology
 ^^^^^^^^^^^
