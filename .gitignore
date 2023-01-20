@@ -132,3 +132,9 @@ dmypy.json
 .DS_Store
 doc_build/.DS_Store
 doc_build/source/images/.DS_Store
+
+# Data folder
+
+data/
+doc_build/.DS_Store
+doc_build/source/images/.DS_Store
