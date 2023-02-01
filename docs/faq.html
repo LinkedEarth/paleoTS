@@ -27,6 +27,8 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -37,6 +39,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Creating an account" href="account.html" />
@@ -92,8 +95,8 @@
 <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="account.html">Creating an account</a></li>
-<li class="toctree-l1"><a class="reference internal" href="installing.html">Installing paleoTS</a></li>
-<li class="toctree-l1"><a class="reference internal" href="working.html">Working with PaleoTS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing.html">Installing PaleoTS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="working.html">Working with PaleoTS: a Tutorial</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Learn More</span></p>
 <ul>
@@ -169,11 +172,20 @@
 <ol class="arabic simple">
 <li><p>Do I need to use Pyleoclim with PaleoTS? Can I use other toolboxes?</p></li>
 </ol>
-<p>The short answer to this is yes. You can use any toolboxes and in any languages that your heart desire and write the component code. However, there are two caveats to take into consideration:</p>
+<p>The short answer to this is yes. You can use any toolboxes and in any languages that your heart desires and write the component code. However, there are two caveats to take into consideration:</p>
 <ul class="simple">
 <li><p>You may need to create and store a Docker container for that specific library if you are planning to use our servers. Otherwise you just need to ensure that the library is available on your server along WINGS.</p></li>
 <li><p>The data output need to be of similar type as what is needed by the abstract workflow (in most cases a JSON file). If you are planning to replace only certain components in workflow, make sure that the properties in the JSON file are filled out appropriately.</p></li>
 </ul>
+<p>You can learn more about creating your own components <a class="reference internal" href="working.html#creating-new-components"><span class="std std-ref">here</span></a>.</p>
+<ol class="arabic simple" start="2">
+<li><p>Do I need to use Docker containers?</p></li>
+</ol>
+<p>If you are planning to use PaleoTS through our server, you do. If you are <cite>installing your own version on your servers &lt;installing&gt;</cite>, you can make sure that all the packages you need are also on the server. You may need to rewrite existing code to work with packages installed on a server.</p>
+<ol class="arabic simple" start="3">
+<li><p>Can I work offline?</p></li>
+</ol>
+<p>When using our server, not at the moment. You can be offline while the runs execute but you will need an internet connection to interact with PaleoTS. If installing on your own machine, you may need an internet connection when pulling Docker containers.</p>
 </section>
 
 

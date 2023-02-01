@@ -27,6 +27,8 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -37,6 +39,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Frequently asked questions" href="faq.html" />
@@ -98,8 +101,8 @@
 <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="account.html">Creating an account</a></li>
-<li class="toctree-l1"><a class="reference internal" href="installing.html">Installing paleoTS</a></li>
-<li class="toctree-l1"><a class="reference internal" href="working.html">Working with PaleoTS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing.html">Installing PaleoTS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="working.html">Working with PaleoTS: a Tutorial</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Learn More</span></p>
 <ul>
@@ -197,7 +200,7 @@
 <h2>How does it work?<a class="headerlink" href="#how-does-it-work" title="Permalink to this heading">¶</a></h2>
 <p>The technical details are described in the following section but for now, think about how you would describe performing a statistical analysis at a high-level. Let’s use the example of spectral analysis. Essentially, it consists of pre-processing steps such as standardization, detrending and regridding, the analysis step (transformation from the time to the frequency domain), and assessment of significance. The strategy described here can be encasulated in an <strong>abstract template</strong> as shown in the figure below.</p>
 <img alt="_images/PaleoTSv1.png" src="_images/PaleoTSv1.png" />
-<p>This template can then be filled with various methods. For instance, detrending can be accomplished through linear detrending or a Savitzy-Golay filter and spectral analysis can be performed through a variety of methods. The model catalog keeps track of the methof and their associated requirements in the form of rules. For instance, MTM requires evenly-spaced data and linear detrending is only appopriate if the trend is linear. Each method has an implementation. As of September 2022, PaleoTs only uses methods available through the <a class="reference external" href="https://pyleoclim-util.readthedocs.io/en/master/">Pyleoclim</a> software package, which was developed in parallel. Please note that Pyleoclim is <strong>not</strong> necessary for PaleoTS and methods from other packages can be used as long as they meet specific criteria which are detailed in <a class="reference internal" href="working.html#working"><span class="std std-ref">Working with PaleoTS</span></a>.</p>
+<p>This template can then be filled with various methods. For instance, detrending can be accomplished through linear detrending or a Savitzy-Golay filter and spectral analysis can be performed through a variety of methods. The model catalog keeps track of the methof and their associated requirements in the form of rules. For instance, MTM requires evenly-spaced data and linear detrending is only appopriate if the trend is linear. Each method has an implementation. As of September 2022, PaleoTs only uses methods available through the <a class="reference external" href="https://pyleoclim-util.readthedocs.io/en/master/">Pyleoclim</a> software package, which was developed in parallel. Please note that Pyleoclim is <strong>not</strong> necessary for PaleoTS and methods from other packages can be used as long as they meet specific criteria which are detailed in <a class="reference internal" href="working.html#working"><span class="std std-ref">Working with PaleoTS: a Tutorial</span></a>.</p>
 <p>In order for the rules to apply a data profiler allows to ‘sense’ the data. As of September 2022, we have two main sensors:</p>
 <ul class="simple">
 <li><p>Whether the data is evenly-spaced (see <a class="reference external" href="https://pyleoclim-util.readthedocs.io/en/master/core/api.html#pyleoclim.core.series.Series.is_evenly_spaced">this Pyleoclim method</a>)</p></li>

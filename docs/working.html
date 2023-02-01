@@ -27,6 +27,8 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -37,10 +39,11 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Reproducing a scientific workflow with paleoTS" href="workflow.html" />
-    <link rel="prev" title="Installing paleoTS" href="installing.html" /> 
+    <link rel="prev" title="Installing PaleoTS" href="installing.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -92,11 +95,12 @@
 <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="account.html">Creating an account</a></li>
-<li class="toctree-l1"><a class="reference internal" href="installing.html">Installing paleoTS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing.html">Installing PaleoTS</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Working with PaleoTS: a Tutorial</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#wings-login">WINGS login</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#running-a-workflow">Running a workflow</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#running-a-workflow-with-multiple-datasets">Running a workflow with multiple datasets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#specializing-a-workflow">Specializing a workflow</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#understanding-data-types">Understanding data types</a><ul>
@@ -284,6 +288,10 @@
 </ul>
 <img alt="_images/Run_ExecutableWorkflow.svg" src="_images/Run_ExecutableWorkflow.svg" /><p>The <a class="reference internal" href="#executable-workflow"><span class="std std-ref">executable workflow</span></a> contains all the information about the method applied, the parameter values and the name of the output file for reproducibility. Notice that <em>DetrendSG</em> and <em>gkernel</em> are greyed out. This is because the data has no trend and was evenly-spaced so they were skipped at execution time. Notice that the file name for <em>OutputTS8</em> and <em>OutputTS9</em> are the same, confirming the skip. All names are unique for a given combination of input data, parameters, and programs (including versions of the programs).</p>
 <p>Congratulations! You have run your first analysis with PaleoTS. Feel free to go back and select another of the possible executable workflows.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you want to run all possible <a class="reference internal" href="#executable-workflow"><span class="std std-ref">executable workflows</span></a> for this particular template, select “Plan and Run Workflow”. Note that you will not be able to select specific method parameters in this mode.</p>
+</div>
 <section id="running-a-workflow-with-multiple-datasets">
 <h3>Running a workflow with multiple datasets<a class="headerlink" href="#running-a-workflow-with-multiple-datasets" title="Permalink to this heading">¶</a></h3>
 <p>More often that not, we want to run the same workflow on several datasets. In PaleoTS, you can do so by setting the input (<em>InputTS</em>) as a collection. To do so, head to Analysis -&gt; Edit Workflow and select the <em>SpectralAnalysis</em> workflow. Click on <em>InputTS</em> and set “Input should be a collection” to true (red circle).</p>
@@ -306,6 +314,14 @@
 <p>Don’t forget to save the workflow!!</p>
 </div>
 <p>To run the workflow, go to Analysis -&gt; Run Workflow and PaleoTS will prompt you to select multiple files (use command+click or option+click on your computer on the dropdown menu) and enter the parameter values as comma-separated values.</p>
+</section>
+<section id="specializing-a-workflow">
+<h3>Specializing a workflow<a class="headerlink" href="#specializing-a-workflow" title="Permalink to this heading">¶</a></h3>
+<p>In some cases, you may not be interested in running all possible methods corresponding to a specific abstract step. You can either (1) <a class="reference internal" href="#creating-new-workflows-with-existing-components"><span class="std std-ref">create a new workflow</span></a> or (2) specialize the template. Let’s look at the second option.</p>
+<p>Select the spectral analysis workflow:</p>
+<img alt="_images/Run_SpectralAnalysis.png" src="_images/Run_SpectralAnalysis.png" />
+<p>And</p>
+<img alt="_images/Run_specialize.png" src="_images/Run_specialize.png" />
 </section>
 </section>
 <section id="understanding-data-types">
@@ -641,12 +657,42 @@
 <p>We now need to create the <a class="reference internal" href="#executable-workflow"><span class="std std-ref">executable component</span></a> corresponding to this <a class="reference internal" href="#abstract-workflow"><span class="std std-ref">abstract component</span></a>. Right-click on the <a class="reference internal" href="#abstract-workflow"><span class="std std-ref">abstract component</span></a> and select <em>Add Component</em>:</p>
 <img alt="_images/NewComponent_CreateExecutable.png" src="_images/NewComponent_CreateExecutable.png" />
 <p>And enter the name <em>LiPD_to_Table</em> when prompted. Notice that the puzzle piece is red instead of orange, signaling that the code is missing from the <a class="reference internal" href="#executable-workflow"><span class="std std-ref">executable component</span></a>.</p>
+<p>Select the <em>Lipd_to_Table</em> component. Notice that the I/O is already filled from the information we entered in the <a class="reference internal" href="#abstract-workflow"><span class="std std-ref">abstract component</span></a>. Click on the code tab and select <em>Initialize</em> -&gt; Python:</p>
+<img alt="_images/NewComponent_Initialize.png" src="_images/NewComponent_Initialize.png" />
+<p>Select yes when prompted to override existing code. PaleoTS created the io.sh, run, and a blank Python script for you to get started. You do not have to touch the io.sh file.</p>
+<p>We need to modify the run file to indicate that we want to run from the Pyleoclim container and parse the input/output name:</p>
+<img alt="_images/NewComponent_Run.png" src="_images/NewComponent_Run.png" />
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Don’t forget to save!!</p>
+</div>
+<p>Select the newly created python file and enter your code (you can find a version of this code on our <a class="reference external" href="https://github.com/LinkedEarth/paleoTS">GitHub repo</a>):</p>
+<img alt="_images/NewComponent_Python.png" src="_images/NewComponent_Python.png" />
+<p>You can now <a class="reference internal" href="#creating-new-workflows-with-existing-components"><span class="std std-ref">create a workflow using this new component</span></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The component has been deleted after making this tutorial and is not available upon download/login into PaleoTS.</p>
+</div>
 <section id="using-your-own-packages">
 <h3>Using your own packages<a class="headerlink" href="#using-your-own-packages" title="Permalink to this heading">¶</a></h3>
+<p>Although the Pyleoclim containers contain many libraries useful for scientific research, you may want to use your own packages. We recommend using Docker containers for execution inside each component. You can find many packages already in containers on registries such as <a class="reference external" href="https://hub.docker.com/search?q=">DockerHub</a> or <a class="reference external" href="https://quay.io/search">quay.io</a>.</p>
+<p>If you need to containerize your own packages, we recommend using <a class="reference external" href="https://docs.2i2c.org/en/latest/admin/howto/environment/hub-user-image-template-guide.html">this tutorial</a>.</p>
 </section>
 </section>
 <section id="adding-rules">
 <h2>Adding rules<a class="headerlink" href="#adding-rules" title="Permalink to this heading">¶</a></h2>
+<p>Under the <em>Rules</em> tab, select <em>Add Rule</em>:</p>
+<img alt="_images/Rules_addrules.png" src="_images/Rules_addrules.png" />
+<p>You will be presented with the following options:</p>
+<ul class="simple">
+<li><p><strong>Parameter setting rule</strong>: Creates a rule to set a parameter value based on the metadata of any of the other inputs or outputs.</p></li>
+<li><p><strong>Invalidation rule</strong>: Invalidates the component based on all the metadata associated with the inputs (for instance, not applying linear detrending to data with a nonlinear trend). Invalidation rule will stop the workflow (not planning to run this particular combination).</p></li>
+<li><p><strong>No-operation Rule</strong>: Skips a specific component based on either the metadata associated with the inputs/outputs (e.g., do not interpolate already evenly-spaced data). Unlike the invalidation rule, this will not completely stop the workflow, just skip this particular component.</p></li>
+<li><p><strong>Forward Metadata Propagation Rule</strong>: Propagates the metadata of the inputs down the workflow. In PaleoTS, we use this to propagate the <em>isEvenlySpaced</em> metadata through the pre-processing steps. It would allow to switch the order of operations in the workflow while holding the rule that some spectral methods don’t require evenly-spaced data.</p></li>
+<li><p><strong>Backward Metadata Propagation Rule</strong>: Sets the expected input metadata based on the output metadata. Although it is not used directly in PaleoTS, rules could be set for expectation of the output. For instance, the inputs would need to be in specific units given an output specified units. A data transformation could be added to the workflow and toggled on/off depending on units.</p></li>
+<li><p><strong>Collection Size Rule</strong>: Gives PaleoTS a hint on how big the output collection is for components (not used currently).</p></li>
+</ul>
+<p>When you select a category, PaleoTS will create a template based on the current I/O. You need to add the actual rule! The language used is Jena, which can learn more about <a class="reference external" href="https://jena.apache.org/documentation/inference/#RULEbuiltins">here</a>.</p>
 </section>
 <section id="terminology">
 <h2>Terminology<a class="headerlink" href="#terminology" title="Permalink to this heading">¶</a></h2>
@@ -688,7 +734,7 @@
         <a href="workflow.html" class="btn btn-neutral float-right" title="Reproducing a scientific workflow with paleoTS" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="installing.html" class="btn btn-neutral float-left" title="Installing paleoTS" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="installing.html" class="btn btn-neutral float-left" title="Installing PaleoTS" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

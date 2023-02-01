@@ -27,6 +27,9 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -37,10 +40,11 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Relevant Publications" href="publications.html" />
-    <link rel="prev" title="Working with PaleoTS" href="working.html" /> 
+    <link rel="prev" title="Working with PaleoTS: a Tutorial" href="working.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -92,12 +96,17 @@
 <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="account.html">Creating an account</a></li>
-<li class="toctree-l1"><a class="reference internal" href="installing.html">Installing paleoTS</a></li>
-<li class="toctree-l1"><a class="reference internal" href="working.html">Working with PaleoTS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing.html">Installing PaleoTS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="working.html">Working with PaleoTS: a Tutorial</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Learn More</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Reproducing a scientific workflow with paleoTS</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Reproducing a scientific workflow with paleoTS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#data">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#data-exploration">Data exploration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="publications.html">Relevant Publications</a></li>
 <li class="toctree-l1"><a class="reference internal" href="citing.html">Citing paleoTS</a></li>
 </ul>
@@ -166,6 +175,31 @@
             
   <section id="reproducing-a-scientific-workflow-with-paleots">
 <span id="workflow"></span><h1>Reproducing a scientific workflow with paleoTS<a class="headerlink" href="#reproducing-a-scientific-workflow-with-paleots" title="Permalink to this heading">¶</a></h1>
+<p>In this example, we will reproduce one of the studies illustrating the use of Pyleoclim. This study was presented in a Jupyter Notebook, which can be found <a class="reference external" href="https://github.com/LinkedEarth/PyleoclimPaper/blob/main/Orbital%20Cycles/Chasing%20orbital%20cyclicities.ipynb">here</a>.  Note that this notebook is fully executable through <a class="reference external" href="https://mybinder.org/v2/gh/LinkedEarth/PyleoclimPaper/HEAD">MyBinder</a>.</p>
+<p>The notebook demonstrates the use of spectral and wavelet analysis using a sea surface temperature reconstruction from Site ODP846 in the Eastern Equatorial Pacific. The goal is to explore the periodicities present in the 5-million years record and explore any coherency between insolation and the sea surface temperature record.</p>
+<p>We strongly encourage you to learn how to use PaleoTS using <a class="reference internal" href="working.html#working"><span class="std std-ref">this tutorial</span></a> before diving into the scientific application.</p>
+<section id="data">
+<h2>Data<a class="headerlink" href="#data" title="Permalink to this heading">¶</a></h2>
+<p>The record is described in Mix et al. (1995), Shackleton et al. (1995), and Lawrence et al. (2006). The age model for the core was obtained by aligning the benthic <span class="math notranslate nohighlight">\(\delta^{18}O\)</span> to the benthic stack of Lisiecki and Raymo (2005, LR04) using the HMM-Match algorithm developed by Lin et al. (2014) as used by Khider et al. (2017). The latter is a probabilistic method that generates an ensemble of 1000 possible age models compatible with the chronostratigraphic constraints.</p>
+<p>The dataset is stored in the Linked Paleo Data Format (LiPD, McKay and Emile-Geay (2016)) and available in PaleoTS (ODP846.Lawrence.2006.lpd).</p>
+</section>
+<section id="data-exploration">
+<h2>Data exploration<a class="headerlink" href="#data-exploration" title="Permalink to this heading">¶</a></h2>
+<p>Our first task is to extract the sea surface temperature record from the LiPD file. To do so, we will be using the <em>ExtractTsfromLiPD</em> workflow, accessible through Analysis -&gt; Run workflow, with the following parameters:</p>
+<img alt="_images/Example_ExtractTs.png" src="_images/Example_ExtractTs.png" />
+<p>Here, the <em>mode</em> parameter corresponds to the type of data in the LiPD file (chron or paleo) and <em>number</em> corresponds to the variable number. From the notebook, we know that the sea surface temperature record is number 8.</p>
+<p>Click on <em>Plan &amp; Run Workflow</em> (red circle) and head over to Analysis -&gt; Access Runs:</p>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this heading">¶</a></h2>
+<p>Khider, D., Ahn, S., Lisiecki, L. E., Lawrence, C. E., &amp; Kienast, M. (2017). The Role of Uncertainty in Estimating Lead/Lag Relationships in Marine Sedimentary Archives: A Case Study From the Tropical Pacific. Paleoceanography, 32(11), 1275-1290.</p>
+<p>Lawrence, K. T., Liu, Z. H., &amp; Herbert, T. D. (2006). Evolution of the eastern tropical Pacific through Plio-Pleistocene glaciation. Science, 312(5770), 79-83.</p>
+<p>Lin, L., Khider, D., Lisiecki, L. E., &amp; Lawrence, C. E. (2014). Probabilistic sequence alignment of stratigraphic records. Paleoceanography, 29(976-989), 976-989.</p>
+<p>Lisiecki, L. E., &amp; Raymo, M. E. (2005). A Pliocene-Pleistocene stack of 57 globally distributed benthic δ18O records. Paleoceanography, 20(PA1003).</p>
+<p>McKay, N. P., &amp; Emile-Geay, J. (2016). Technical Note: The Linked Paleo Data framework – a common tongue for paleoclimatology. Climate of the Past, 12, 1093-1100.</p>
+<p>Mix, A. C., J. Le, and N. J. Shackleton (1995), Benthic foraminiferal stable isotope stratigraphy from Site 846: 0–1.8 Ma, Proc. Ocean Drill. Program Sci. Results, 138, 839–847.</p>
+<p>Shackleton, N. J., Hall, M. A., &amp; Pate, D. (1995). Pliocene stable isotope stratigraphy of ODP Site 846. Proc. Ocean Drill. Program Sci. Results, 138, 337-356.</p>
+</section>
 </section>
 
 
@@ -179,7 +213,7 @@
         <a href="publications.html" class="btn btn-neutral float-right" title="Relevant Publications" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="working.html" class="btn btn-neutral float-left" title="Working with PaleoTS" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="working.html" class="btn btn-neutral float-left" title="Working with PaleoTS: a Tutorial" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
