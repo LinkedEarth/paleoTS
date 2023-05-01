@@ -166,7 +166,7 @@ Select the spectral analysis workflow:
 
 .. image:: /images/Run_SpectralAnalysis.png
 
-And
+And click on the component you wish to select a particular method for. Here, let's take the Spectral Analysis component. Click on the component and toggle the menu to the desired method. 
 
 .. image:: /images/Run_specialize.png
 

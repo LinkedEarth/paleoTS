@@ -42,7 +42,7 @@ Spectral analysis
 
 Our next task is to run the *SpectralAnalysis* workflow on our ODP846 sea surface temperature record. Go to Analysis -> Run Workflow. Select the *SpectralAnalysis* workflow and use the following parameters:
 
-.. image:: /images/Example_Example_RunSpectral.png
+.. image:: /images/Example_RunSpectral.png
 
 Select *Plan and Run Workflow* to run all possible combinations.
 
@@ -51,19 +51,23 @@ Wavelet analysis
 
 Our next task is to run the *WaveletAnalysis* workflow on our ODP846 sea surface temperature record. Go to Analysis -> Run Workflow. Select the *WaveletAnalysis* workflow and use the following parameters:
 
-.. image:: /images/Example_Example_RunWavelet.png
+.. image:: /images/Example_RunWavelet.png
 
 Select *Plan and Run Workflow* to run all possible combinations.
 
 Cross-wavelet analysis
 ^^^^^^^^^^^^^^^^^^^^^^
 
-Let's compare the 
+For the cross-wavelet analysis, let's take the coherence between the ODP846 sae surface temperatures and insolation at 5S determined from orbital variations. This can be computed using the `Climlab package <https://climlab.readthedocs.io/en/latest/>`_. Go to Analysis -> Run Workflow. Select the *XWavelet_Coherence_Workflow* and use the following parameters:
+
+.. image:: /images/Example_RunXWavelet.png
+
+Select *Plan and Run Workflow* to run all possible combinations.
 
 Results
 ^^^^^^^
 
-The workflows presented above resulted in hundreds of runs. We analyzed the results and drew conclusions in the following `Jupyter Notebook <https://github.com/LinkedEarth/paleoTS/blob/main/Chasing%20Orbital%20Cyclicities.ipynb>`_, which can be used as an example on how to parse runs from PaleoTS.
+The workflows presented above resulted in thousands of runs. We analyzed the results and drew conclusions in the following `Jupyter Notebook <https://github.com/LinkedEarth/paleoTS/blob/main/Chasing%20Orbital%20Cyclicities.ipynb>`_, which can be used as an example on how to parse runs from PaleoTS.
 
 References
 ^^^^^^^^^^

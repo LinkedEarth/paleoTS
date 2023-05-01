@@ -104,6 +104,10 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Reproducing a scientific workflow with paleoTS</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#data">Data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#data-exploration">Data exploration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#spectral-analysis">Spectral analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#wavelet-analysis">Wavelet analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cross-wavelet-analysis">Cross-wavelet analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#results">Results</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#references">References</a></li>
 </ul>
 </li>
@@ -187,8 +191,35 @@
 <h2>Data exploration<a class="headerlink" href="#data-exploration" title="Permalink to this heading">¶</a></h2>
 <p>Our first task is to extract the sea surface temperature record from the LiPD file. To do so, we will be using the <em>ExtractTsfromLiPD</em> workflow, accessible through Analysis -&gt; Run workflow, with the following parameters:</p>
 <img alt="_images/Example_ExtractTs.png" src="_images/Example_ExtractTs.png" />
-<p>Here, the <em>mode</em> parameter corresponds to the type of data in the LiPD file (chron or paleo) and <em>number</em> corresponds to the variable number. From the notebook, we know that the sea surface temperature record is number 8.</p>
-<p>Click on <em>Plan &amp; Run Workflow</em> (red circle) and head over to Analysis -&gt; Access Runs:</p>
+<p>Here, the <em>mode</em> parameter corresponds to the type of data in the LiPD file (chron or paleo) and <em>number</em> corresponds to the variable number. From the original study, we know that the sea surface temperature record is number 8.</p>
+<p>Click on <em>Plan and Run Workflow</em> and head over to Analysis -&gt; Access Runs. Select the <em>ExtractTsfromLiPD</em> and next to output, click on the <em>save icon</em> to put the data into the system:</p>
+<img alt="_images/Example_AddDataFromRun.png" src="_images/Example_AddDataFromRun.png" />
+<p>Next, let’s create a simple <a class="reference external" href="https://pyleoclim-util.readthedocs.io/en/master/core/api.html#pyleoclim.core.lipdseries.LipdSeries.dashboard">dashboard</a> for our series. Go to Analysis -&gt; Run workflow and select the <em>LiPDDashboard</em> workflow with the following inputs:</p>
+<img alt="_images/Example_Dashboard.png" src="_images/Example_Dashboard.png" />
+<p>Click on <em>Plan and Run Workflow</em>, then head over to Analysis -&gt; Access Runs. The dashboard is presented here:</p>
+<img alt="_images/Example_DashboardOutput.png" src="_images/Example_DashboardOutput.png" />
+</section>
+<section id="spectral-analysis">
+<h2>Spectral analysis<a class="headerlink" href="#spectral-analysis" title="Permalink to this heading">¶</a></h2>
+<p>Our next task is to run the <em>SpectralAnalysis</em> workflow on our ODP846 sea surface temperature record. Go to Analysis -&gt; Run Workflow. Select the <em>SpectralAnalysis</em> workflow and use the following parameters:</p>
+<img alt="_images/Example_RunSpectral.png" src="_images/Example_RunSpectral.png" />
+<p>Select <em>Plan and Run Workflow</em> to run all possible combinations.</p>
+</section>
+<section id="wavelet-analysis">
+<h2>Wavelet analysis<a class="headerlink" href="#wavelet-analysis" title="Permalink to this heading">¶</a></h2>
+<p>Our next task is to run the <em>WaveletAnalysis</em> workflow on our ODP846 sea surface temperature record. Go to Analysis -&gt; Run Workflow. Select the <em>WaveletAnalysis</em> workflow and use the following parameters:</p>
+<img alt="_images/Example_RunWavelet.png" src="_images/Example_RunWavelet.png" />
+<p>Select <em>Plan and Run Workflow</em> to run all possible combinations.</p>
+</section>
+<section id="cross-wavelet-analysis">
+<h2>Cross-wavelet analysis<a class="headerlink" href="#cross-wavelet-analysis" title="Permalink to this heading">¶</a></h2>
+<p>For the cross-wavelet analysis, let’s take the coherence between the ODP846 sae surface temperatures and insolation at 5S determined from orbital variations. This can be computed using the <a class="reference external" href="https://climlab.readthedocs.io/en/latest/">Climlab package</a>. Go to Analysis -&gt; Run Workflow. Select the <em>XWavelet_Coherence_Workflow</em> and use the following parameters:</p>
+<img alt="_images/Example_RunXWavelet.png" src="_images/Example_RunXWavelet.png" />
+<p>Select <em>Plan and Run Workflow</em> to run all possible combinations.</p>
+</section>
+<section id="results">
+<h2>Results<a class="headerlink" href="#results" title="Permalink to this heading">¶</a></h2>
+<p>The workflows presented above resulted in thousands of runs. We analyzed the results and drew conclusions in the following <a class="reference external" href="https://github.com/LinkedEarth/paleoTS/blob/main/Chasing%20Orbital%20Cyclicities.ipynb">Jupyter Notebook</a>, which can be used as an example on how to parse runs from PaleoTS.</p>
 </section>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this heading">¶</a></h2>
