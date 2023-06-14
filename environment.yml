@@ -15,5 +15,6 @@ dependencies:
   - pip:
     - pyleoclim
     - git+https://github.com/LinkedEarth/pylipd.git@main
+    - git+https://github.com/fzhu2e/cfr.git@main
     - pymannkendall
     - kneed
