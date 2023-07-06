@@ -13,7 +13,7 @@ dependencies:
   - pip
   - python=3.10
   - pip:
-    - pyleoclim
+    - pyleoclim==0.12.0
     - git+https://github.com/LinkedEarth/pylipd.git@main
     - git+https://github.com/fzhu2e/cfr.git@main
     - pymannkendall
